@@ -1,4 +1,4 @@
-import 'package:ld_wbench2/translations/tr.dart';
+import 'package:ld_wbench3/trans/tr.dart';
 
 const Map<String, String> enMap = {
   Tr.sabinaApp: "Sabina application",

@@ -4,12 +4,12 @@
 // Estats de la càrrega de dades per a la pàgina.
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:ld_wbench2/core/ld_ctrl.dart';
-import 'package:ld_wbench2/core/ld_view_ctrl.dart';
-import 'package:ld_wbench2/tools/debug.dart';
-import 'package:ld_wbench2/tools/fi_fo.dart';
-import 'package:ld_wbench2/tools/load_steps.dart';
-import 'package:ld_wbench2/tools/null_mang.dart';
+import 'package:ld_wbench3/core/ld_ctrl.dart';
+import 'package:ld_wbench3/core/ld_view_ctrl.dart';
+import 'package:ld_wbench3/tools/debug.dart';
+import 'package:ld_wbench3/tools/fi_fo.dart';
+import 'package:ld_wbench3/tools/load_steps.dart';
+import 'package:ld_wbench3/tools/null_mang.dart';
 
 // Declaració de possibles estats d'un LdState.
 enum LoadState {
@@ -27,44 +27,43 @@ typedef FnExc = Future<(Exception?, bool)> Function(Exception? pExc);
 typedef FnStep = Future<Exception?> Function(FiFo pQueue, List<dynamic> pArgs);
 typedef FnThen = Exception? Function(FiFo pQueue);
 
-abstract class LdState<
-  S extends LdState<S, C>, 
-  C extends LdCtrl<C, S>> {
-
+abstract class LdState<S extends LdState<S, C>, C extends LdCtrl<C, S>> {
   // 📝 ESTÀTICS -----------------------
   static const className = "LdState";
   static const loadingElm = "LoadingElelement";
 
   // 🧩 MEMBRES ------------------------
-  String?    _errorCode;
-  String?    _errorMessage;
+  String? _errorCode;
+  String? _errorMessage;
   Exception? _exception;
   late C _ctrl;
   Function(FiFo pQueue)? _onAltered;
   final _queue = FiFo();
   int _length = 0;
   int _dids = 0;
- 
+
   // 🛠️ CONSTRUCTORS -------------------
-  LdState({ String? pErrorCode, String? pErrorMessage, Exception? pException })
-  : _errorCode = pErrorCode, _errorMessage = pErrorMessage, _exception = pException;
+  LdState({String? pErrorCode, String? pErrorMessage, Exception? pException})
+    : _errorCode = pErrorCode,
+      _errorMessage = pErrorMessage,
+      _exception = pException;
 
   // 📥 GETTERS/SETTERS ----------------
-  C get ctrl        => _ctrl;
+  C get ctrl => _ctrl;
   set ctrl(C pCtrl) => _ctrl = pCtrl;
 
   String? get errorCode => _errorCode;
   String? get errorMessage => _errorMessage;
-  setError(String? pErrCode, String? pErrMsg) { 
+  setError(String? pErrCode, String? pErrMsg) {
     _errorCode = pErrCode;
     _errorMessage = pErrMsg;
-    ctrl.notify(pTgts: [ ctrl.tag ]);
+    ctrl.notify(pTgts: [ctrl.tag]);
   }
 
   Exception? get exception => _exception;
   set exception(Exception? pException) {
     _exception = pException;
-    ctrl.notify(pTgts: [ ctrl.tag ]);
+    ctrl.notify(pTgts: [ctrl.tag]);
   }
 
   FiFo get queue => _queue;
@@ -85,8 +84,13 @@ abstract class LdState<
 
   // GESTIÓ DE PASOS ------------------
   // Afegeix un pas a la pila de pasos.
-  void addFn(FnStep pStep,
-      {List<dynamic>? pArgs, FnThen? pThen, FnExc? pOnExc, LoadStep? pLoadStep}) {
+  void addFn(
+    FnStep pStep, {
+    List<dynamic>? pArgs,
+    FnThen? pThen,
+    FnExc? pOnExc,
+    LoadStep? pLoadStep,
+  }) {
     pushArgs(pArgs);
     if (isNotNull(pThen)) {
       _queue.push(pThen);
@@ -104,15 +108,32 @@ abstract class LdState<
 
   // Afegeix un pas a la pila de pasos que s'executarà immediatament si
   // la pàgina està carregada.
-  Future<void> addFnNow(LdViewCtrl pCtrl, FnStep pStep,
-      {List<dynamic>? pArgs, FnThen? pThen, FnExc? pOnExc, LoadStep? pLoadStep}) async {
-    addFn(pStep, pArgs: pArgs, pThen: pThen, pOnExc: pOnExc, pLoadStep: pLoadStep);
+  Future<void> addFnNow(
+    LdViewCtrl pCtrl,
+    FnStep pStep, {
+    List<dynamic>? pArgs,
+    FnThen? pThen,
+    FnExc? pOnExc,
+    LoadStep? pLoadStep,
+  }) async {
+    addFn(
+      pStep,
+      pArgs: pArgs,
+      pThen: pThen,
+      pOnExc: pOnExc,
+      pLoadStep: pLoadStep,
+    );
     if (isLoaded) await runSteps();
   }
 
   // Avantpasa un pas al principi de la pila de pasos.
-  void sneakFn(FnStep pStep,
-      {List<dynamic>? pArgs, FnThen? pThen, FnExc? pOnExc, LoadStep? pLoadStep}) {
+  void sneakFn(
+    FnStep pStep, {
+    List<dynamic>? pArgs,
+    FnThen? pThen,
+    FnExc? pOnExc,
+    LoadStep? pLoadStep,
+  }) {
     _queue.sneak(pStep);
     _length += 1;
 
@@ -159,12 +180,18 @@ abstract class LdState<
     while (isNotNull(obj)) {
       switch (obj) {
         case LoadStep loadStep:
-          (isNotNull(loadStep.description)) 
-            ? Debug.debug(DebugLevel.debug_2, 'Step[${loadStep.index}]: ${loadStep.title??"?"} ${loadStep.description}') 
-            : Debug.debug(DebugLevel.debug_2, "Step[${loadStep.index}]: ${loadStep.title??"?"}");
-            if (loadStep.title != null) {
-              Get.parameters[loadingElm] = loadStep.title;
-            }
+          (isNotNull(loadStep.description))
+              ? Debug.debug(
+                DebugLevel.debug_2,
+                'Step[${loadStep.index}]: ${loadStep.title ?? "?"} ${loadStep.description}',
+              )
+              : Debug.debug(
+                DebugLevel.debug_2,
+                "Step[${loadStep.index}]: ${loadStep.title ?? "?"}",
+              );
+          if (loadStep.title != null) {
+            Get.parameters[loadingElm] = loadStep.title;
+          }
           if (isNotNull(loadStep.upds)) {
             ctrl.notify(pTgts: loadStep.upds!);
           }
@@ -177,9 +204,10 @@ abstract class LdState<
           break;
         case FnStep fnStep:
           bool contn = false;
-          exc = (isNotNull(fthen))
-              ? await fnStep(_queue, args).then((_) => fthen!(_queue))
-              : await fnStep(_queue, args);
+          exc =
+              (isNotNull(fthen))
+                  ? await fnStep(_queue, args).then((_) => fthen!(_queue))
+                  : await fnStep(_queue, args);
           if (isNotNull(exc)) {
             if (isNotNull(fexc)) (exc, contn) = await fexc!(exc);
             if (!contn && isNotNull(exc)) {
@@ -209,7 +237,7 @@ abstract class LdState<
   // FUNCIONS ABSTRACTES ---------------------
   // Carrega les dades de l'estat del widget o de la vista.
   void loadData();
-  
+
   // Només cert quan l'estat encara no ha carregat cap dada.
   bool get isNew;
 

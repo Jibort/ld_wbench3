@@ -2,18 +2,15 @@
 // CreatedAt: 2025/02/12 dc. JIQ
 
 import 'package:get/get.dart';
-import 'package:ld_wbench2/core/ld_id_mixin.dart';
-import 'package:ld_wbench2/core/ld_state.dart';
-import 'package:ld_wbench2/core/ld_view_ctrl.dart';
-import 'package:ld_wbench2/core/ld_widget_ctrl.dart';
-import 'package:ld_wbench2/tools/debug.dart';
+import 'package:ld_wbench3/core/ld_id_mixin.dart';
+import 'package:ld_wbench3/core/ld_state.dart';
+import 'package:ld_wbench3/core/ld_view_ctrl.dart';
+import 'package:ld_wbench3/core/ld_widget_ctrl.dart';
+import 'package:ld_wbench3/tools/debug.dart';
 
-abstract class LdCtrl<
-  C extends LdCtrl<C, S>,
-  S extends LdState<S, C>>
-extends  GetxController 
-with     LdIdMixin {
-
+abstract class LdCtrl<C extends LdCtrl<C, S>, S extends LdState<S, C>>
+    extends GetxController
+    with LdIdMixin {
   // 📝 ESTÀTICS -----------------------
   static const className = "LdCtrl";
 
@@ -21,12 +18,11 @@ with     LdIdMixin {
   final S _state;
 
   // 🛠️ CONSTRUCTORS -------------------
-  LdCtrl({ required String pTag, required S pState })
-  : _state = pState {
+  LdCtrl({required String pTag, required S pState}) : _state = pState {
     tag = pTag;
     typeName = className;
     pState.ctrl = this as C;
-    
+
     // Utilitzar tag: tag per evitar conflictes
     if (this is LdWidgetCtrl) {
       Get.put<LdWidgetCtrl>(this as LdWidgetCtrl, tag: tag, permanent: true);
@@ -56,5 +52,4 @@ with     LdIdMixin {
       }
     }
   }
-
 } // abstract class LdCtrl

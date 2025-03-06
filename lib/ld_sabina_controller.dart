@@ -6,19 +6,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ld_wbench2/core/ld_id_mixin.dart';
-import 'package:ld_wbench2/services/services.dart';
-import 'package:ld_wbench2/tools/debug.dart';
+import 'package:ld_wbench3/core/ld_id_mixin.dart';
+import 'package:ld_wbench3/services/services.dart';
+import 'package:ld_wbench3/tools/debug.dart';
 
-class   LdSabinaController 
-extends FullLifeCycleController
-with    LdIdMixin {
+class LdSabinaController extends FullLifeCycleController with LdIdMixin {
   // ESTÀTICS -------------------------
   static const className = "LdSabinaCtrl";
-  static final LdSabinaController  inst = LdSabinaController();
+  static final LdSabinaController inst = LdSabinaController();
 
   // 🧩 MEMBRES --------------------------
-  final LdSecureStorageService _secStg = LdSecureStorageService.inst; // LdController.find(LdSecureStorageService.className) as LdSecureStorageService;
+  final LdSecureStorageService _secStg =
+      LdSecureStorageService
+          .inst; // LdController.find(LdSecureStorageService.className) as LdSecureStorageService;
 
   // CONSTRUCTOR ----------------------
   LdSabinaController() {
@@ -91,27 +91,37 @@ with    LdIdMixin {
 
   // Quan l'aplicació torna a primer pla
   void onResumed() {
-    Debug.info("[onResumed.${runtimeType.toString()}]: L'aplicació ha tornat a primer pla.");
+    Debug.info(
+      "[onResumed.${runtimeType.toString()}]: L'aplicació ha tornat a primer pla.",
+    );
   }
 
   // Quan l'aplicació és minimitzada o passa a segon pla
   void onPaused() {
-    Debug.info("[onPaused.${runtimeType.toString()}]: L'aplicació ha estat minimitzada.");
+    Debug.info(
+      "[onPaused.${runtimeType.toString()}]: L'aplicació ha estat minimitzada.",
+    );
   }
 
   // Quan l'aplicació està en estat inactiu (com per exemple, en una trucada)
   void onInactive() {
-    Debug.info("[onInactive.${runtimeType.toString()}]: L'aplicació està en estat inactiu.");
+    Debug.info(
+      "[onInactive.${runtimeType.toString()}]: L'aplicació està en estat inactiu.",
+    );
   }
 
   // Quan l'aplicació és tancada pel sistema operatiu
   void onDetached() {
     Get.delete(tag: className);
-    Debug.info("[onDetached.${runtimeType.toString()}]: L'aplicació ha estat completament tancada.");
+    Debug.info(
+      "[onDetached.${runtimeType.toString()}]: L'aplicació ha estat completament tancada.",
+    );
   }
 
   // Quan l'aplicació es ocultada.
   void onHidden() {
-    Debug.info("[onHidden.${runtimeType.toString()}]: L'aplicació ha estat ocultada.");
+    Debug.info(
+      "[onHidden.${runtimeType.toString()}]: L'aplicació ha estat ocultada.",
+    );
   }
 }
