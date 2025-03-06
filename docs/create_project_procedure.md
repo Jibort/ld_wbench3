@@ -73,8 +73,8 @@
 * > **git** _init_
 12. Crea el fitxer _.gitignore_
 13. Crea el nou repositori 'ld_wbench3' a GitHub.
-14. > **git** _remote add origin_ https://github.com/teu-username/ld_wbench3.git
+14. > **git** _remote add origin_ https://github.com/jibort/ld_wbench3.git
 15. > **git** _add ._
-16. > **git** _commit -m "Inicialització del projecte"_
+16. > **git** _commit -m "Inici del projecte"_
 17. > **git** _branch -M main_
 18. > **git** _push -u origin main_
