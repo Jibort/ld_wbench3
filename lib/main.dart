@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ENTRADA A L'APLICACIÓ ==============
 void main() {
   runApp(const MyApp());
 }
