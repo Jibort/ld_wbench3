@@ -2,40 +2,24 @@
 // CreatedAt: 2025/02/21 dv. JIQ
 
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:ld_wbench3/core/ld_ctrl.dart';
-import 'package:ld_wbench3/core/ld_view_ctrl.dart';
-import 'package:ld_wbench3/core/ld_widget_state.dart';
-import 'package:ld_wbench3/theme/ld_theme_controller.dart';
+import 'package:ld_wbench3/core/ld_view.dart';
 
-abstract class LdWidgetCtrl extends LdCtrl<LdWidgetCtrl, LdWidgetState> {
+abstract class LdWidgetCtrl extends LdCtrl {
   // 📝 ESTÀTICS -----------------------
   static const className = "LdWidgetCtrl";
 
   // 🧩 MEMBRES ------------------------
+  // Vista on es renderitza el widget.
   final LdViewCtrl _viewCtrl;
 
-  // 🛠️ CONSTRUCTORS ---------------------
-  LdWidgetCtrl({
-    required super.pTag,
-    required LdViewCtrl pViewCtrl,
-    required super.pState,
-  }) : _viewCtrl = pViewCtrl;
+  // 🛠️ CONSTRUCTORS ------------------
+  LdWidgetCtrl({required super.pTag, required LdViewCtrl pViewCtrl})
+    : _viewCtrl = pViewCtrl;
 
-  // 📥 GETTERS/SETTERS ------------------
-  LdWidgetState get widgetState => super.state;
+  // 📥 GETTERS/SETTERS ----------------
   LdViewCtrl get viewCtrl => _viewCtrl;
 
-  // FUNCIONS ABSTRACTES --------------
-  Widget buildWidget(BuildContext pCtx);
-
-  // Crea un widget depenent dels canvis de tema.
-  Widget buildWidgetWithTheme(BuildContext pCtx) {
-    return GetBuilder<LdThemeController>(
-      tag: LdThemeController.ctrlTag,
-      builder: (_) {
-        return buildWidget(pCtx); // ✅ Crida a buildWidget en lloc de recursió
-      },
-    );
-  }
-} // abstract class LdWidgetCtrl
+  // 🌥️ FUNCIONS ABSTRACTES -----------
+  Widget buildWidget(BuildContext pBCtx);
+}

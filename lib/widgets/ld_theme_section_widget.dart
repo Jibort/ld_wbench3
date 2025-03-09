@@ -8,13 +8,13 @@ import 'package:ld_wbench3/core/ld_view_ctrl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // WIDGET 'LdThemeSectionWidget' ======
-class LdThemeSectionWidget
-    extends LdWidget<LdThemeSectionWidgetState, LdThemeSectionWidgetCtrl> {
-  // ESTÀTICS -------------------------
+class LdThemeSectionWidget extends LdWidget<LdThemeSectionWidgetCtrl> {
+  // 📝 ESTÀTICS -----------------------
   static const String className = "LdThemeSectionWidget";
   static const String widgetTag = "ldThemeSectionWidgetTag";
 
   // MEMBRES --------------------------
+  GetBuilder<LdThemeSectionWidgetCtrl>? _getBuilder;
   final String title;
   final Widget child;
   final EdgeInsetsGeometry? padding;
@@ -29,26 +29,18 @@ class LdThemeSectionWidget
     this.padding,
     this.margin,
     String? customTag,
-  }) : super(
-         pViewCtrl: viewCtrl,
-         pState: LdThemeSectionWidgetState(
-           pLabel: title,
-           pViewState: viewCtrl.state,
-           pViewCtrl: viewCtrl,
-         ),
-       ) {
+  }) : super(pViewCtrl: viewCtrl) {
     ctrl = LdThemeSectionWidgetCtrl(
       pTag:
           customTag ??
           "${widgetTag}_${viewCtrl.tag}_${DateTime.now().millisecondsSinceEpoch}",
       pViewCtrl: viewCtrl,
-      pState: state,
     );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return GetBuilder<LdThemeSectionWidgetCtrl>(
+  Widget build(BuildContext pBCtx) {
+    _getBuilder ??= GetBuilder<LdThemeSectionWidgetCtrl>(
       id: ctrl.tag,
       tag: ctrl.tag,
       builder:
@@ -72,41 +64,16 @@ class LdThemeSectionWidget
             ),
           ),
     );
-  }
-}
-
-class LdThemeSectionWidgetState extends LdWidgetState {
-  // ESTÀTICS -------------------------
-  static const className = "LdThemeSectionWidgetState";
-
-  // CONSTRUCTOR ---------------------
-  LdThemeSectionWidgetState({
-    required super.pLabel,
-    required super.pViewState,
-    required super.pViewCtrl,
-  });
-
-  // IMPLEMENTACIÓ 'LdWidgetState'
-  @override
-  void loadData() {
-    // No cal carregar dades específiques per aquest widget
+    return _getBuilder!;
   }
 }
 
 class LdThemeSectionWidgetCtrl extends LdWidgetCtrl {
-  // ESTÀTICS -------------------------
+  // 📝 ESTÀTICS -----------------------
   static const className = "LdThemeSectionWidgetCtrl";
 
   // CONSTRUCTOR ---------------------
-  LdThemeSectionWidgetCtrl({
-    required super.pTag,
-    required super.pViewCtrl,
-    required LdThemeSectionWidgetState super.pState,
-  });
-
-  // GETTERS/SETTERS -----------------
-  LdThemeSectionWidgetState get sectionState =>
-      super.state as LdThemeSectionWidgetState;
+  LdThemeSectionWidgetCtrl({required super.pTag, required super.pViewCtrl});
 
   // Construir el widget
   @override

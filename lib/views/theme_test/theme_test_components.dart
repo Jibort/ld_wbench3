@@ -4,7 +4,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:ld_wbench3/core/ld_widget.dart';
-import 'package:ld_wbench3/theme/ld_theme_controller.dart';
+import 'package:ld_wbench3/theme/ld_theme_ctrl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ld_wbench3/views/theme_test/controller.dart';
 import 'package:ld_wbench3/widgets/ld_card_widget.dart';
@@ -12,90 +12,35 @@ import 'package:ld_wbench3/widgets/ld_theme_section_widget.dart';
 import 'package:ld_wbench3/widgets/separators.dart';
 
 // WIDGET 'ThemeTestComponents' =======
-class ThemeTestComponents
-    extends LdWidget<ThemeTestComponentsState, ThemeTestComponentsCtrl> {
-  // ESTÀTICS -------------------------
+class ThemeTestComponents extends LdWidget<ThemeTestComponentsCtrl> {
+  // 📝 ESTÀTICS -----------------------
   static const String className = "ThemeTestComponents";
-  static const String widgetTag = "${className}Tag";
+  static const String widgetTag = "${className}_tag";
 
   // CONSTRUCTOR ---------------------
   ThemeTestComponents({super.key, required ThemeTestViewCtrl viewCtrl})
-    : super(
-        pViewCtrl: viewCtrl,
-        pState: ThemeTestComponentsState(
-          pLabel: "Components del tema",
-          pViewState: viewCtrl.state,
-          pViewCtrl: viewCtrl,
-        ),
-      ) {
-    ctrl = ThemeTestComponentsCtrl(
-      pTag: widgetTag,
-      pViewCtrl: viewCtrl,
-      pState: state,
-    );
+    : super(pViewCtrl: viewCtrl) {
+    ctrl = ThemeTestComponentsCtrl(pTag: widgetTag, pViewCtrl: viewCtrl);
   }
 }
 
-// STATE 'ThemeTestComponentsState' ===
-class ThemeTestComponentsState extends LdWidgetState {
-  // ESTÀTICS -------------------------
-  static const className = "ThemeTestComponentsState";
+// CTRL 'ThemeTestComponentsCtrl' =====
+class ThemeTestComponentsCtrl extends LdWidgetCtrl {
+  // 📝 ESTÀTICS -----------------------
+  static const className = "ThemeTestComponentsCtrl";
 
   // MEMBRES --------------------------
   bool showAllComponents = true;
   bool isThemeSwitching = false;
 
   // CONSTRUCTOR ---------------------
-  ThemeTestComponentsState({
-    required super.pLabel,
-    required super.pViewState,
-    required super.pViewCtrl,
-  });
-
-  // IMPLEMENTACIÓ 'LdWidgetState'
-  @override
-  void loadData() {
-    // No necessitem carregar dades específiques
-  }
-
-  // Accés al controlador de la vista de temes
-  ThemeTestViewCtrl get themeTestViewCtrl => viewCtrl as ThemeTestViewCtrl;
-
-  // Mètodes per controlar la visualització dels components
-  void toggleShowAllComponents() {
-    showAllComponents = !showAllComponents;
-    viewCtrl.notify(pTgts: [widgetCtrl.tag]);
-  }
-
-  // Estat per mostrar animació durant el canvi de tema
-  void setThemeSwitching(bool pSwitching) {
-    isThemeSwitching = pSwitching;
-    viewCtrl.notify(pTgts: [widgetCtrl.tag]);
-  }
-}
-
-// CTRL 'ThemeTestComponentsCtrl' =====
-class ThemeTestComponentsCtrl extends LdWidgetCtrl {
-  // ESTÀTICS -------------------------
-  static const className = "ThemeTestComponentsCtrl";
-
-  // CONSTRUCTOR ---------------------
-  ThemeTestComponentsCtrl({
-    required super.pTag,
-    required super.pViewCtrl,
-    required ThemeTestComponentsState super.pState,
-  });
-
-  // GETTERS/SETTERS -----------------
-  ThemeTestComponentsState get componentsState =>
-      super.state as ThemeTestComponentsState;
+  ThemeTestComponentsCtrl({required super.pTag, required super.pViewCtrl});
 
   // Construir la vista
   @override
-  Widget buildWidget(BuildContext pCtx) {
-    bool isDarkMode = LdThemeController.inst.isDarkMode;
-    final theme = Theme.of(pCtx);
-
+  Widget buildWidget(BuildContext pBCtx) {
+    bool isDarkMode = LdThemeCtrl.single.isDarkMode;
+    final theme = Theme.of(pBCtx);
     return SingleChildScrollView(
       padding: EdgeInsets.all(16.0.w),
       child: Column(
@@ -128,7 +73,7 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
           _buildThemeButton(
             'Tema clar',
             Icons.light_mode,
-            LdThemeController.inst.themeMode == ThemeMode.light,
+            LdThemeCtrl.single.themeMode == ThemeMode.light,
             () =>
                 (viewCtrl as ThemeTestViewCtrl)
                     .setLightTheme(), // viewCtrl.callMethod('setLightTheme'),
@@ -136,7 +81,7 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
           _buildThemeButton(
             'Tema fosc',
             Icons.dark_mode,
-            LdThemeController.inst.themeMode == ThemeMode.dark,
+            LdThemeCtrl.single.themeMode == ThemeMode.dark,
             () =>
                 (viewCtrl as ThemeTestViewCtrl)
                     .setDarkTheme(), // viewCtrl.callMethod('setDarkTheme'),
@@ -144,7 +89,7 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
           _buildThemeButton(
             'Tema sistema',
             Icons.settings_suggest,
-            LdThemeController.inst.themeMode == ThemeMode.system,
+            LdThemeCtrl.single.themeMode == ThemeMode.system,
             () =>
                 (viewCtrl as ThemeTestViewCtrl)
                     .setSystemTheme(), // viewCtrl.callMethod('setSystemTheme'),
@@ -418,5 +363,17 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
         ],
       ),
     );
+  }
+
+  // Accions sobre els components.
+  void toggleShowAllComponents() {
+    showAllComponents = !showAllComponents;
+    viewCtrl.notify(pTgts: [tag]);
+  }
+
+  // Estat per mostrar animació durant el canvi de tema
+  void setThemeSwitching(bool pSwitching) {
+    isThemeSwitching = pSwitching;
+    viewCtrl.notify(pTgts: [tag]);
   }
 }

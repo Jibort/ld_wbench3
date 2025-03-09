@@ -4,7 +4,8 @@
 import 'package:ld_wbench3/core/ld_service.dart';
 
 class LdNetworkService extends LdService {
-  // ESTÀTICS -------------------------
+  // 📝 ESTÀTICS -----------------------
+  static LdNetworkService single = LdNetworkService();
   static const className = "LdNetworkService";
 
   // VARIABLES ------------------------

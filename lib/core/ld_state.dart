@@ -1,10 +1,11 @@
 // Classe per a la generalització de l'estat d'una vista de l'aplicació.
 // CreatedAt: 2025/02/19 dc. JIQ
 
+// ignore_for_file: unnecessary_getters_setters
+
 // Estats de la càrrega de dades per a la pàgina.
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:ld_wbench3/core/ld_ctrl.dart';
 import 'package:ld_wbench3/core/ld_view_ctrl.dart';
 import 'package:ld_wbench3/tools/debug.dart';
 import 'package:ld_wbench3/tools/fi_fo.dart';
@@ -27,7 +28,7 @@ typedef FnExc = Future<(Exception?, bool)> Function(Exception? pExc);
 typedef FnStep = Future<Exception?> Function(FiFo pQueue, List<dynamic> pArgs);
 typedef FnThen = Exception? Function(FiFo pQueue);
 
-abstract class LdState<S extends LdState<S, C>, C extends LdCtrl<C, S>> {
+abstract class LdState {
   // 📝 ESTÀTICS -----------------------
   static const className = "LdState";
   static const loadingElm = "LoadingElelement";
@@ -36,7 +37,6 @@ abstract class LdState<S extends LdState<S, C>, C extends LdCtrl<C, S>> {
   String? _errorCode;
   String? _errorMessage;
   Exception? _exception;
-  late C _ctrl;
   Function(FiFo pQueue)? _onAltered;
   final _queue = FiFo();
   int _length = 0;
@@ -49,21 +49,16 @@ abstract class LdState<S extends LdState<S, C>, C extends LdCtrl<C, S>> {
       _exception = pException;
 
   // 📥 GETTERS/SETTERS ----------------
-  C get ctrl => _ctrl;
-  set ctrl(C pCtrl) => _ctrl = pCtrl;
-
   String? get errorCode => _errorCode;
   String? get errorMessage => _errorMessage;
   setError(String? pErrCode, String? pErrMsg) {
     _errorCode = pErrCode;
     _errorMessage = pErrMsg;
-    ctrl.notify(pTgts: [ctrl.tag]);
   }
 
   Exception? get exception => _exception;
   set exception(Exception? pException) {
     _exception = pException;
-    ctrl.notify(pTgts: [ctrl.tag]);
   }
 
   FiFo get queue => _queue;
@@ -123,7 +118,7 @@ abstract class LdState<S extends LdState<S, C>, C extends LdCtrl<C, S>> {
       pOnExc: pOnExc,
       pLoadStep: pLoadStep,
     );
-    if (isLoaded) await runSteps();
+    if (isLoaded) await runSteps(pCtrl);
   }
 
   // Avantpasa un pas al principi de la pila de pasos.
@@ -170,7 +165,7 @@ abstract class LdState<S extends LdState<S, C>, C extends LdCtrl<C, S>> {
   dynamic popQueue() => _queue.pop();
 
   // EXECUCIÓ DELS PASSOS -------------
-  Future<(List<dynamic>, Exception?)> runSteps() async {
+  Future<(List<dynamic>, Exception?)> runSteps(LdViewCtrl pCtrl) async {
     final args = <dynamic>[];
     FnThen? fthen;
     FnExc? fexc;
@@ -193,7 +188,7 @@ abstract class LdState<S extends LdState<S, C>, C extends LdCtrl<C, S>> {
             Get.parameters[loadingElm] = loadStep.title;
           }
           if (isNotNull(loadStep.upds)) {
-            ctrl.notify(pTgts: loadStep.upds!);
+            pCtrl.notify(pTgts: loadStep.upds!);
           }
           break;
         case FnThen fnThen:

@@ -1,15 +1,22 @@
 // Classe base dels estats de vistes de l'aplicació.
 // CreatedAt: 2025/02/15 ds. JIQ
 
+// ignore_for_file: unnecessary_getters_setters
+
 import 'package:ld_wbench3/core/ld_state.dart';
 import 'package:ld_wbench3/core/ld_view_ctrl.dart';
 import 'package:ld_wbench3/widgets/widget_key.dart';
 
-abstract class LdViewState extends LdState<LdViewState, LdViewCtrl> {
+abstract class LdViewState<
+  S extends LdViewState<S, C>,
+  C extends LdViewCtrl<C, S>
+>
+    extends LdState {
   // 🧩 MEMBRES --------------------------
   LoadState _loadState = LoadState.isNew;
-  bool virgin = true;
+  late final C _ctrl;
 
+  bool virgin = true;
   String _title;
   String? _subtitle;
   String? _message;
@@ -27,23 +34,34 @@ abstract class LdViewState extends LdState<LdViewState, LdViewCtrl> {
        _message = pMessage;
 
   // 📥 GETTERS/SETTERS ------------------
+  C get ctrl => _ctrl;
+  set ctrl(C pCtrl) => _ctrl = pCtrl;
+
   String get title => _title;
   String? get subtitle => _subtitle;
   void setTitles({required String pTitle, String? pSubtitle}) {
     _title = pTitle;
     _subtitle = pSubtitle;
-    viewCtrl.notify(pTgts: [viewCtrl.tag]);
+    ctrl.notify();
   }
 
   String? get message => _message;
   set message(String? pMessage) {
     _message = pMessage;
-    viewCtrl.notify(pTgts: [viewCtrl.tag]);
+    ctrl.notify();
   }
 
-  // Controlador de la vista ----------
-  LdViewCtrl get viewCtrl => super.ctrl;
-  set viewCtrl(LdViewCtrl pVCtrl) => super.ctrl = pVCtrl;
+  @override
+  setError(String? pErrCode, String? pErrMsg) {
+    super.setError(pErrCode, pErrMsg);
+    ctrl.notify();
+  }
+
+  @override
+  set exception(Exception? pException) {
+    super.exception = pException;
+    ctrl.notify();
+  }
 
   // 'LdState' ------------------------
   @override
@@ -62,12 +80,12 @@ abstract class LdViewState extends LdState<LdViewState, LdViewCtrl> {
   // Estableix que la càrrega s'està preparant.
   void setPreparing() {
     _loadState = (virgin) ? LoadState.isPreparing : LoadState.isPreparingAgain;
-    viewCtrl.notify(
+    ctrl.notify(
       pTgts: [
         WidgetKey.scaffold.idx,
-        WidgetKey.pageBody.idx,
         WidgetKey.appBar.idx,
         WidgetKey.appBarProgress.idx,
+        WidgetKey.pageBody.idx,
       ],
     );
   }
@@ -75,11 +93,12 @@ abstract class LdViewState extends LdState<LdViewState, LdViewCtrl> {
   // Estableix que la càrrega s'està executant.
   void setLoading() {
     _loadState = (virgin) ? LoadState.isLoading : LoadState.isLoadingAgain;
-    viewCtrl.notify(
+    ctrl.notify(
       pTgts: [
         WidgetKey.pageBody.idx,
         WidgetKey.appBar.idx,
         WidgetKey.appBarProgress.idx,
+        WidgetKey.pageBody.idx,
       ],
     );
   }
@@ -90,7 +109,7 @@ abstract class LdViewState extends LdState<LdViewState, LdViewCtrl> {
 
     _loadState = LoadState.isLoaded;
     virgin = false;
-    viewCtrl.notify();
+    ctrl.notify();
   }
 
   // Estableix que la càrrega s'ha completat amb error.
@@ -98,7 +117,7 @@ abstract class LdViewState extends LdState<LdViewState, LdViewCtrl> {
     exception = pExc;
     _loadState = LoadState.isError;
     setError(pError, pErrorMessage);
-    viewCtrl.notify();
+    ctrl.notify();
   }
 
   // Reinicia l'estat original de càrrega.
@@ -108,6 +127,6 @@ abstract class LdViewState extends LdState<LdViewState, LdViewCtrl> {
     _loadState = LoadState.isNew;
     virgin = true;
     loadData();
-    viewCtrl.notify(pTgts: [ctrl.tag]);
+    ctrl.notify();
   }
 }

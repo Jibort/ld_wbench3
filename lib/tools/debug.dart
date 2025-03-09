@@ -8,36 +8,50 @@ const levelInfo = -1;
 const levelWarn = -2;
 
 enum DebugLevel {
-  info,  warn, 
-  error, fatal,
-  debug_0, debug_1,
-  debug_2, debug_3,
-  debug_4, debug_5,
-  debug_6, debug_7,
-  debug_8, debug_9,
+  info,
+  warn,
+  error,
+  fatal,
+  debug_0,
+  debug_1,
+  debug_2,
+  debug_3,
+  debug_4,
+  debug_5,
+  debug_6,
+  debug_7,
+  debug_8,
+  debug_9,
 }
 
 class Debug {
-  static Map<DebugLevel, bool> dLevels =  {
-    DebugLevel.info: true,    DebugLevel.warn: true, 
-    DebugLevel.error: true,   DebugLevel.fatal: true,
-    DebugLevel.debug_0: true, DebugLevel.debug_1: true,
-    DebugLevel.debug_2: true, DebugLevel.debug_3: true,
-    DebugLevel.debug_4: true, DebugLevel.debug_5: true,
-    DebugLevel.debug_6: true, DebugLevel.debug_7: true,
-    DebugLevel.debug_8: true, DebugLevel.debug_9: true
+  static Map<DebugLevel, bool> dLevels = {
+    DebugLevel.info: true,
+    DebugLevel.warn: true,
+    DebugLevel.error: true,
+    DebugLevel.fatal: true,
+    DebugLevel.debug_0: true,
+    DebugLevel.debug_1: true,
+    DebugLevel.debug_2: true,
+    DebugLevel.debug_3: true,
+    DebugLevel.debug_4: true,
+    DebugLevel.debug_5: true,
+    DebugLevel.debug_6: true,
+    DebugLevel.debug_7: true,
+    DebugLevel.debug_8: true,
+    DebugLevel.debug_9: true,
   };
 
   static void activateAllLevels() {
     for (var level in DebugLevel.values) {
       dLevels[level] = true;
-     }
+    }
   }
 
   static void deactivateAllLevels() {
     for (var level in DebugLevel.values) {
       dLevels[level] = false;
-     }
+    }
   }
 
   static void activateLevels(List<DebugLevel> pLevels) {
@@ -79,7 +93,7 @@ class Debug {
   static void error(String pMsg, Exception? pExc) {
     if (dLevels[DebugLevel.error]!) {
       if (kDebugMode) {
-        print("ERROR: $pMsg");
+        print("ERROR ⚠️: $pMsg");
         if (isNotNull(pExc)) {
           print("EXCEPTION: ${pExc.toString()}");
         }
@@ -88,10 +102,13 @@ class Debug {
   }
 
   static void fatal(String pMsg, Exception? pExc) {
-    Map<String, String> parms = {
-      'msg': pMsg,
-      'exc': pExc?.toString() ?? "",
-    };
-    Error.throwWithStackTrace(parms["msg"]?? "Error!", StackTrace.fromString(""));
+    if (pExc == null) {
+      Error.throwWithStackTrace("FATAL ⚠️: $pMsg", StackTrace.current);
+    } else {
+      Error.throwWithStackTrace(
+        "FATAL ⚠️: $pMsg\nEXCEPTION ⚠️: ${pExc.toString()}",
+        StackTrace.current,
+      );
+    }
   }
 }

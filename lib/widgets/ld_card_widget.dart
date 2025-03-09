@@ -8,12 +8,13 @@ import 'package:ld_wbench3/core/ld_widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // WIDGET 'LdCardWidget' ==============
-class LdCardWidget extends LdWidget<LdCardWidgetState, LdCardWidgetCtrl> {
-  // ESTÀTICS -------------------------
+class LdCardWidget extends LdWidget<LdCardWidgetCtrl> {
+  // 📝 ESTÀTICS -----------------------
   static const String className = "LdCardWidget";
   static const String widgetTag = "ldCardWidgetTag";
 
   // MEMBRES --------------------------
+  GetBuilder<LdCardWidgetCtrl>? _getBuilder;
   final Widget child;
   final double? elevation;
   final EdgeInsetsGeometry? padding;
@@ -36,26 +37,18 @@ class LdCardWidget extends LdWidget<LdCardWidgetState, LdCardWidgetCtrl> {
     this.borderRadius,
     this.onTap,
     String? customTag,
-  }) : super(
-         pViewCtrl: viewCtrl,
-         pState: LdCardWidgetState(
-           pLabel: "Card Widget",
-           pViewState: viewCtrl.state,
-           pViewCtrl: viewCtrl,
-         ),
-       ) {
+  }) : super(pViewCtrl: viewCtrl) {
     ctrl = LdCardWidgetCtrl(
       pTag:
           customTag ??
           "${widgetTag}_${viewCtrl.tag}_${DateTime.now().millisecondsSinceEpoch}",
       pViewCtrl: viewCtrl,
-      pState: state,
     );
   }
 
   @override
   Widget build(BuildContext pCtx) {
-    return GetBuilder<LdCardWidgetCtrl>(
+    _getBuilder ??= GetBuilder<LdCardWidgetCtrl>(
       id: ctrl.tag,
       tag: ctrl.tag,
       builder:
@@ -79,42 +72,17 @@ class LdCardWidget extends LdWidget<LdCardWidgetState, LdCardWidgetCtrl> {
             ),
           ),
     );
-  }
-}
-
-// STATE 'LdCardWidgetCtrl' ===========
-class LdCardWidgetState extends LdWidgetState {
-  // ESTÀTICS -------------------------
-  static const className = "LdCardWidgetState";
-
-  // CONSTRUCTOR ---------------------
-  LdCardWidgetState({
-    required super.pLabel,
-    required super.pViewState,
-    required super.pViewCtrl,
-  });
-
-  // IMPLEMENTACIÓ 'LdWidgetState'
-  @override
-  void loadData() {
-    // No cal carregar dades específiques per aquest widget
+    return _getBuilder!;
   }
 }
 
 // CTRL 'LdCardWidgetCtrl' ============
 class LdCardWidgetCtrl extends LdWidgetCtrl {
-  // ESTÀTICS -------------------------
+  // 📝 ESTÀTICS -----------------------
   static const className = "LdCardWidgetCtrl";
 
   // CONSTRUCTOR ---------------------
-  LdCardWidgetCtrl({
-    required super.pTag,
-    required super.pViewCtrl,
-    required LdCardWidgetState super.pState,
-  });
-
-  // GETTERS/SETTERS -----------------
-  LdCardWidgetState get cardState => super.state as LdCardWidgetState;
+  LdCardWidgetCtrl({required super.pTag, required super.pViewCtrl});
 
   // Construir el widget
   @override

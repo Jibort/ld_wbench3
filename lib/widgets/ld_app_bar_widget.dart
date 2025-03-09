@@ -9,13 +9,14 @@ import 'package:ld_wbench3/widgets/widget_key.dart';
 import 'package:ld_wbench3/theme/text_styles.dart';
 
 // WIDGET 'LdAppBarWidget' ============
-class LdAppBarWidget extends LdWidget<LdAppBarWidgetState, LdAppBarWidgetCtrl>
+class LdAppBarWidget extends LdWidget<LdAppBarWidgetCtrl>
     implements PreferredSizeWidget {
-  // ESTÀTICS -------------------------
+  // 📝 ESTÀTICS -----------------------
   static const String className = "LdAppBarWidget";
   static const String widgetTag = "ldAppBarWidgetTag";
 
-  // MEMBRES --------------------------
+  // 🧩 MEMBRES ------------------------
+  GetBuilder<LdAppBarWidgetCtrl>? _getBuilder;
   final String title;
   final String? subtitle;
   final List<Widget>? actions;
@@ -39,27 +40,14 @@ class LdAppBarWidget extends LdWidget<LdAppBarWidgetState, LdAppBarWidgetCtrl>
     this.leading,
     this.backgroundColor,
     this.foregroundColor,
-  }) : super(
-         key: key ?? const Key(appBarIdx),
-         pViewCtrl: viewCtrl,
-         pState: LdAppBarWidgetState(
-           pLabel: "AppBar Widget",
-           pViewState: viewCtrl.state,
-           pViewCtrl: viewCtrl,
-         ),
-       ) {
-    ctrl = LdAppBarWidgetCtrl(
-      pTag: widgetTag,
-      pViewCtrl: viewCtrl,
-      pState: state,
-    );
+  }) : super(key: key ?? const Key(appBarIdx), pViewCtrl: viewCtrl) {
+    ctrl = LdAppBarWidgetCtrl(pTag: widgetTag, pViewCtrl: viewCtrl);
   }
 
   @override
-  Widget build(BuildContext pCtx) {
-    final theme = Theme.of(pCtx);
-
-    return GetBuilder<LdAppBarWidgetCtrl>(
+  Widget build(BuildContext pBCtx) {
+    final theme = Theme.of(pBCtx);
+    _getBuilder ??= GetBuilder<LdAppBarWidgetCtrl>(
       id: ctrl.tag,
       tag: ctrl.tag,
       builder:
@@ -90,47 +78,24 @@ class LdAppBarWidget extends LdWidget<LdAppBarWidgetState, LdAppBarWidgetCtrl>
                     : null,
           ),
     );
+    return _getBuilder!;
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-// STATE 'LdAppBarWidget' =============
-class LdAppBarWidgetState extends LdWidgetState {
-  // ESTÀTICS -------------------------
-  static const className = "LdAppBarWidgetState";
-
-  // CONSTRUCTOR ---------------------
-  LdAppBarWidgetState({
-    required super.pLabel,
-    required super.pViewState,
-    required super.pViewCtrl,
-  });
-
-  // IMPLEMENTACIÓ 'LdWidgetState'
-  @override
-  void loadData() {
-    // No cal carregar dades específiques per aquest widget
-  }
-}
-
 // CTRL 'LdAppBarWidget' ==============
 class LdAppBarWidgetCtrl extends LdWidgetCtrl {
-  // ESTÀTICS -------------------------
+  // 📝 STATICS ------------------------
   static const className = "LdAppBarWidgetCtrl";
 
-  // CONSTRUCTOR ---------------------
-  LdAppBarWidgetCtrl({
-    required super.pTag,
-    required super.pViewCtrl,
-    required LdAppBarWidgetState super.pState,
-  });
+  // 🛠️ CONSTRUCTORS ---------------------
+  LdAppBarWidgetCtrl({required super.pTag, required super.pViewCtrl});
 
-  // GETTERS/SETTERS -----------------
-  LdAppBarWidgetState get appBarState => super.state as LdAppBarWidgetState;
+  // 📥 GETTERS/SETTERS ----------------
 
-  // Construir el widget
+  // 🔄 'LdWidgetCtrl' -----------------
   @override
   Widget buildWidget(BuildContext pCtx) {
     // Aquest mètode no s'utilitza directament perquè la construcció

@@ -5,8 +5,8 @@ import 'package:ld_wbench3/core/ld_service.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LdSecureStorageService extends LdService {
-  // ESTÀTICS -------------------------
-  static LdSecureStorageService inst = LdSecureStorageService();
+  // 📝 ESTÀTICS -----------------------
+  static LdSecureStorageService single = LdSecureStorageService();
   static const className = "LdSecureStorageService";
 
   // 🧩 MEMBRES --------------------------

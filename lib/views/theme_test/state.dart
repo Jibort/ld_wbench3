@@ -1,13 +1,16 @@
 // Estat de la vista de test de temes.
 // Created: 2025/03/06 dj.
 
-import 'package:ld_wbench3/core/ld_view_state.dart';
+import 'package:get/get.dart';
+import 'package:ld_wbench3/trans/tr.dart';
 import 'package:ld_wbench3/tools/debug.dart';
 import 'package:ld_wbench3/tools/fi_fo.dart';
+import 'package:ld_wbench3/core/ld_view.dart';
 import 'package:ld_wbench3/views/theme_test/controller.dart';
 
-class ThemeTestViewState extends LdViewState {
-  // ESTÀTICS -------------------------
+class ThemeTestViewState
+    extends LdViewState<ThemeTestViewState, ThemeTestViewCtrl> {
+  // 📝 ESTÀTICS -----------------------
   static const className = "ThemeTestViewState";
 
   // MEMBRES --------------------------
@@ -15,16 +18,9 @@ class ThemeTestViewState extends LdViewState {
 
   // CONSTRUCTOR ---------------------
   ThemeTestViewState()
-    : super(
-        pTitle: "Test de Temes",
-        pSubtitle: "Prova les diferents opcions de tema",
-      );
+    : super(pTitle: Tr.sabinaApp.tr, pSubtitle: Tr.sabinaWelcome.tr);
 
-  // GETTERS/SETTERS -----------------
-  ThemeTestViewCtrl get themeTestViewCtrl =>
-      super.viewCtrl as ThemeTestViewCtrl;
-
-  // Implementació de 'LdViewState'
+  // 'LdState'
   @override
   void loadData() {
     // Exemple de càrrega de dades fictícia
@@ -46,6 +42,7 @@ class ThemeTestViewState extends LdViewState {
 
     // Executar passos
     setLoading();
-    runSteps();
+    runSteps(ctrl);
+    setLoaded(null);
   }
 }

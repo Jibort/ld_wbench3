@@ -6,16 +6,29 @@ import 'package:ld_wbench3/core/ld_ctrl.dart';
 import 'package:ld_wbench3/core/ld_view_state.dart';
 import 'package:ld_wbench3/tools/debug.dart';
 
-abstract class LdViewCtrl extends LdCtrl<LdViewCtrl, LdViewState> {
+abstract class LdViewCtrl<
+  C extends LdViewCtrl<C, S>,
+  S extends LdViewState<S, C>
+>
+    extends LdCtrl {
+  // 📝 ESTÀTICS -----------------------
+  static final String className = "LdViewCtrl";
+
   // 🧩 MEMBRES --------------------------
+  final S _vState;
   final List<String> wgIds = <String>[];
 
   // 🛠️ CONSTRUCTORS ---------------------
-  LdViewCtrl({required super.pState, required super.pTag}) {
+  LdViewCtrl({required S pViewState, required super.pTag})
+    : _vState = pViewState {
+    _vState.ctrl = this as C;
     if (state.isNew) {
       state.loadData();
     }
   }
+
+  // 📥 GETTERS/SETTERS ----------------
+  LdViewState get state => _vState;
 
   // GESTIÓ DE WIDGETS ----------------
   void addWidgets(List<String> pWgIds) {
@@ -35,17 +48,11 @@ abstract class LdViewCtrl extends LdCtrl<LdViewCtrl, LdViewState> {
     state.reset();
   }
 
-  // 'GetxController' -----------------
-
-  // Quan la interfície gràfica del controlador està completament carregada
-
-  // FUNCIONS ABSTRACTES --------------
+  // 🌥️ FUNCIONS ABSTRACTES -----------
   Widget buildView(BuildContext pCtx);
 
-  // Updates controlats.
+  // Actualització de controladors de widgets.
   @override
-  void notify({List<String>? pTgts}) {
-    List<String> tgts = pTgts ?? [...wgIds, tag];
-    super.notify(pTgts: tgts);
-  }
+  void notify({List<String>? pTgts}) =>
+      super.notify(pTgts: pTgts ?? [...wgIds, tag]);
 }

@@ -19,14 +19,13 @@ class Tr extends Translations {
   static const reload = "reload";
   static const of = "of";
 
-  
-  static final Tr inst = Tr();
+  static final Tr single = Tr();
   static const Map<String, Map<String, String>> _keys = {
-    'ca': caMap, 
-    'en': enMap, 
-    'es': esMap, 
-    'fr': frMap, 
-    'pt': ptMap 
+    'ca': caMap,
+    'en': enMap,
+    'es': esMap,
+    'fr': frMap,
+    'pt': ptMap,
   };
 
   @override
@@ -35,5 +34,5 @@ class Tr extends Translations {
   void changeLocale(String langCode) {
     var locale = Locale(langCode);
     Get.updateLocale(locale);
-  } 
+  }
 }

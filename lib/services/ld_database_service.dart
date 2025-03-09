@@ -4,7 +4,8 @@
 import 'package:ld_wbench3/core/ld_service.dart';
 
 class LdDatabaseService extends LdService {
-  // ESTÀTICS -------------------------
+  // 📝 ESTÀTICS -----------------------
+  static LdDatabaseService single = LdDatabaseService();
   static const className = "LdDatabaseService";
 
   // 🛠️ CONSTRUCTORS ---------------------

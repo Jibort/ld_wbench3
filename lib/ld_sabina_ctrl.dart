@@ -4,32 +4,71 @@
 // Controlador principal de l'aplicació Sabina.
 // CreatedAt: 2025/02/13 dj. JIQ
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:ld_wbench3/core/ld_id_mixin.dart';
-import 'package:ld_wbench3/services/services.dart';
-import 'package:ld_wbench3/tools/debug.dart';
+// ignore_for_file: avoid_renaming_method_parameters
 
-class LdSabinaController extends FullLifeCycleController with LdIdMixin {
-  // ESTÀTICS -------------------------
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:ld_wbench3/trans/tr.dart';
+import 'package:ld_wbench3/tools/debug.dart';
+import 'package:ld_wbench3/views/app_routes.dart';
+import 'package:ld_wbench3/core/ld_app_ctrl.dart';
+import 'package:ld_wbench3/theme/ld_theme_ctrl.dart';
+import 'package:ld_wbench3/tools/consts/devices.dart';
+
+class LdSabinaCtrl extends LdAppCtrl {
+  // 📝 ESTÀTICS -----------------------
   static const className = "LdSabinaCtrl";
-  static final LdSabinaController inst = LdSabinaController();
 
   // 🧩 MEMBRES --------------------------
-  final LdSecureStorageService _secStg =
-      LdSecureStorageService
-          .inst; // LdController.find(LdSecureStorageService.className) as LdSecureStorageService;
+  final LdThemeCtrl _theme;
+  late Rx<ThemeMode> themeMode;
 
   // CONSTRUCTOR ----------------------
-  LdSabinaController() {
-    tag = className;
-    Get.put(this, tag: tag);
-    var _ = _secStg;
+  LdSabinaCtrl({LdThemeCtrl? pTheme}) : _theme = pTheme ?? LdThemeCtrl() {
+    themeMode = _theme.themeMode.obs;
   }
 
-  // 🔹 GESTIÓ DEL TEMA ----------------
-  Rx<ThemeMode> themeMode = ThemeMode.system.obs;
+  // 'LdAppCtrl' ----------------------
+  @override
+  Widget buildWidget(BuildContext pBCtx) {
+    return ScreenUtilInit(
+      designSize: iPhone8PlusSize,
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder:
+          (_, child) => Obx(
+            () => GetMaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'LdSabinaApp',
+              themeMode: themeMode.value,
+              theme: LdThemeCtrl.single.lightTheme,
+              darkTheme: LdThemeCtrl.single.darkTheme,
+              locale: Get.deviceLocale,
+              fallbackLocale: Locale('ca'),
+              translations: Tr.single,
+              supportedLocales: const [
+                Locale('ca'),
+                Locale('es'),
+                Locale('en'),
+                Locale('fr'),
+                Locale('pt'),
+              ],
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              initialRoute: AppRoutes.initialRoute,
+              getPages: AppRoutes.pages,
+            ),
+          ),
+    );
+  }
 
+  // 🧩 MÈTODES ------------------------
   void toggleTheme() {
     themeMode.value = (Get.isDarkMode) ? ThemeMode.light : ThemeMode.dark;
     Get.changeThemeMode(themeMode.value);
@@ -54,11 +93,11 @@ class LdSabinaController extends FullLifeCycleController with LdIdMixin {
   }
 
   // 🔹 ESTAT DE CONNEXIÓ ----------------
-  RxBool isOnline = false.obs;
+  // RxBool isOnline = false.obs;
 
-  void updateNetworkStatus(bool status) {
-    isOnline.value = status;
-  }
+  // void updateNetworkStatus(bool status) {
+  //   isOnline.value = status;
+  // }
 
   // Carrega les preferències ---------
   Future<void> loadPreferences() async {
