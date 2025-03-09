@@ -28,6 +28,7 @@ class LdSabinaCtrl extends LdAppCtrl {
 
   // CONSTRUCTOR ----------------------
   LdSabinaCtrl({LdThemeCtrl? pTheme}) : _theme = pTheme ?? LdThemeCtrl() {
+    Get.put(LdThemeCtrl(), permanent: true);
     themeMode = _theme.themeMode.obs;
   }
 

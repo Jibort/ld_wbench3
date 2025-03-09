@@ -9,18 +9,29 @@ import 'package:ld_wbench3/tools/debug.dart';
 
 class LdThemeCtrl extends LdCtrl {
   // 📝 ESTÀTICS -----------------------
-  static final LdThemeCtrl _single = LdThemeCtrl();
-  static LdThemeCtrl get single => _single;
+  static bool enabled = false;
+  static late final LdThemeCtrl? _single;
+
+  static LdThemeCtrl get single {
+    if (!enabled) {
+      enabled = true;
+      _single = LdThemeCtrl();
+      _single!.init();
+    }
+    return _single!;
+  }
 
   static const className = "LdThemeCtrl";
   static const ctrlTag = "${className}_tag";
 
   // 🧩 MEMBRES ------------------------
-  ThemeMode _themeMode = ThemeMode.system;
-  bool _isDarkMode = false;
+  late ThemeMode _themeMode = ThemeMode.system;
+  late bool _isDarkMode = false;
 
   // 🛠️ CONSTRUCTORS -------------------
-  LdThemeCtrl() : super(pTag: ctrlTag) {
+  LdThemeCtrl() : super(pTag: ctrlTag);
+
+  void init() {
     // Detectar el mode actual del sistema
     _isDarkMode = Get.isDarkMode;
 

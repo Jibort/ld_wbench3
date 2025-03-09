@@ -3,9 +3,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:ld_wbench3/ld_sabina_app.dart';
 import 'package:ld_wbench3/ld_sabina_ctrl.dart';
 import 'package:ld_wbench3/services/services.dart';
+import 'package:ld_wbench3/theme/ld_theme_ctrl.dart';
 import 'package:ld_wbench3/views/theme_test/view.dart';
 
 void main() async {
@@ -31,7 +33,7 @@ void main() async {
   await sabinaApp.ctrl.loadPreferences();
 
   // Inicialitzar els bindings per a la vista de proves
-  ThemeTestBinding().dependencies();
+  // ThemeTestBinding().dependencies();
 
   // Iniciar l'aplicació utilitzant LdSabinaApplication
   runApp(sabinaApp);

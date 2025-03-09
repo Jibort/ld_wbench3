@@ -2,6 +2,7 @@
 // CreatedAt: 2025/02/12 dc. JIQ
 
 import 'package:get/get.dart';
+import 'package:get/get_instance/src/brand_map.dart';
 import 'package:ld_wbench3/core/ld_id_mixin.dart';
 import 'package:ld_wbench3/core/ld_view.dart';
 import 'package:ld_wbench3/core/ld_widget_ctrl.dart';
@@ -20,12 +21,15 @@ abstract class LdCtrl extends GetxController with LdIdMixin {
 
     // Utilitzar tag: tag per evitar conflictes
     switch (this) {
+      case DummyViewCtrl():
+        break;
       case LdWidgetCtrl():
         Get.put<LdWidgetCtrl>(this as LdWidgetCtrl, tag: tag, permanent: true);
       case LdViewCtrl():
         Get.put<LdViewCtrl>(this as LdViewCtrl, tag: tag, permanent: true);
       case LdThemeCtrl():
-        Get.put<LdThemeCtrl>(this as LdThemeCtrl, tag: tag, permanent: true);
+        break;
+      // Get.put<LdThemeCtrl>(this as LdThemeCtrl, tag: tag, permanent: true);
       default:
         Get.put<LdCtrl>(this, tag: tag, permanent: true);
     }
