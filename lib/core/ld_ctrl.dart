@@ -25,8 +25,10 @@ abstract class LdCtrl extends GetxController with LdIdMixin {
         break;
       case LdWidgetCtrl():
         Get.put<LdWidgetCtrl>(this as LdWidgetCtrl, tag: tag, permanent: true);
+        break;
       case LdViewCtrl():
         Get.put<LdViewCtrl>(this as LdViewCtrl, tag: tag, permanent: true);
+        break;
       case LdThemeCtrl():
         break;
       // Get.put<LdThemeCtrl>(this as LdThemeCtrl, tag: tag, permanent: true);

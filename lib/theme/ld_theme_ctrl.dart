@@ -16,7 +16,6 @@ class LdThemeCtrl extends LdCtrl {
     if (!enabled) {
       enabled = true;
       _single = LdThemeCtrl();
-      _single!.init();
     }
     return _single!;
   }
