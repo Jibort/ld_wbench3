@@ -38,6 +38,10 @@ class LdCardWidget extends LdWidget<LdCardWidgetCtrl> {
     this.onTap,
     String? customTag,
   }) : super(pViewCtrl: viewCtrl) {
+    tag =
+        customTag ??
+        "${widgetTag}_${viewCtrl.tag}_${DateTime.now().millisecondsSinceEpoch}";
+    typeName = className;
     ctrl = LdCardWidgetCtrl(
       pTag:
           customTag ??

@@ -11,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class LdThemeSectionWidget extends LdWidget<LdThemeSectionWidgetCtrl> {
   // 📝 ESTÀTICS -----------------------
   static const String className = "LdThemeSectionWidget";
-  static const String widgetTag = "ldThemeSectionWidgetTag";
+  static const String widgetTag = "${className}_tag";
 
   // MEMBRES --------------------------
   GetBuilder<LdThemeSectionWidgetCtrl>? _getBuilder;
@@ -30,6 +30,8 @@ class LdThemeSectionWidget extends LdWidget<LdThemeSectionWidgetCtrl> {
     this.margin,
     String? customTag,
   }) : super(pViewCtrl: viewCtrl) {
+    tag = widgetTag;
+    typeName = className;
     ctrl = LdThemeSectionWidgetCtrl(
       pTag:
           customTag ??

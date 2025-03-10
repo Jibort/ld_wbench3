@@ -36,6 +36,8 @@ class LdScaffoldWidget extends LdWidget<LdScaffoldWidgetCtrl> {
     this.persistentFooterButtons,
     required super.pViewCtrl,
   }) {
+    tag = widgetTag;
+    typeName = className;
     ctrl = LdScaffoldWidgetCtrl(pTag: widgetTag, pViewCtrl: viewCtrl);
   }
 

@@ -2,7 +2,6 @@
 // CreatedAt: 2025/02/12 dc. JIQ
 
 import 'package:get/get.dart';
-import 'package:get/get_instance/src/brand_map.dart';
 import 'package:ld_wbench3/core/ld_id_mixin.dart';
 import 'package:ld_wbench3/core/ld_view.dart';
 import 'package:ld_wbench3/core/ld_widget_ctrl.dart';
@@ -15,14 +14,12 @@ abstract class LdCtrl extends GetxController with LdIdMixin {
 
   // 🛠️ CONSTRUCTORS -------------------
   LdCtrl({required String pTag}) {
-    // Iniciem els membres de
+    // Iniciem els membres de LdIdMixin
     tag = pTag;
     typeName = className;
 
     // Utilitzar tag: tag per evitar conflictes
     switch (this) {
-      case DummyViewCtrl():
-        break;
       case LdWidgetCtrl():
         Get.put<LdWidgetCtrl>(this as LdWidgetCtrl, tag: tag, permanent: true);
         break;

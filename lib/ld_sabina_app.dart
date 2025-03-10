@@ -24,7 +24,8 @@ class LdSabinaApp extends LdApp<LdSabinaCtrl> {
   // 'StatelessWidget' ----------------
   @override
   Widget build(BuildContext pBCtx) {
-    Get.put(LdThemeCtrl(), permanent: true);
+    LdThemeCtrl tCtrl = LdThemeCtrl();
+    Get.put(tCtrl, tag: tCtrl.tag, permanent: true);
     LdThemeCtrl.single.init();
     return ScreenUtilInit(
       designSize: iPhone8PlusSize,

@@ -16,9 +16,9 @@ class AppRoutes {
       name: ThemeTestView.routeName,
       page: () {
         String tag = Get.parameters[parmElm] ?? "tag?";
-        ThemeTestViewCtrl ctrl = Get.find<ThemeTestViewCtrl>(tag: tag);
+        // ThemeTestViewCtrl ctrl = Get.find<ThemeTestViewCtrl>(tag: tag);
         Get.parameters.remove(tag);
-        return ThemeTestView(pCtrl: ctrl);
+        return ThemeTestView(pTag: tag);
       },
       binding: ThemeTestBinding(),
     ),

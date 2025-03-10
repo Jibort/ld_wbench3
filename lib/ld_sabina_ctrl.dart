@@ -23,11 +23,10 @@ class LdSabinaCtrl extends LdAppCtrl {
   static const className = "LdSabinaCtrl";
 
   // 🧩 MEMBRES --------------------------
-  final LdThemeCtrl _theme;
   late Rx<ThemeMode> themeMode;
 
   // CONSTRUCTOR ----------------------
-  LdSabinaCtrl({LdThemeCtrl? pTheme}) : _theme = pTheme ?? LdThemeCtrl() {
+  LdSabinaCtrl({LdThemeCtrl? pTheme}) {
     themeMode = LdThemeCtrl.single.themeMode.obs;
   }
 

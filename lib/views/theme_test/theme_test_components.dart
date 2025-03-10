@@ -20,6 +20,8 @@ class ThemeTestComponents extends LdWidget<ThemeTestComponentsCtrl> {
   // CONSTRUCTOR ---------------------
   ThemeTestComponents({super.key, required ThemeTestViewCtrl viewCtrl})
     : super(pViewCtrl: viewCtrl) {
+    tag = widgetTag;
+    typeName = className;
     ctrl = ThemeTestComponentsCtrl(pTag: widgetTag, pViewCtrl: viewCtrl);
   }
 }
@@ -28,6 +30,7 @@ class ThemeTestComponents extends LdWidget<ThemeTestComponentsCtrl> {
 class ThemeTestComponentsCtrl extends LdWidgetCtrl {
   // 📝 ESTÀTICS -----------------------
   static const className = "ThemeTestComponentsCtrl";
+  static const ctrlTag = "${className}_ctrl";
 
   // MEMBRES --------------------------
   bool showAllComponents = true;

@@ -20,7 +20,8 @@ class ThemeTestView extends LdView<ThemeTestViewState, ThemeTestViewCtrl> {
   static const routeName = "/theme-test";
 
   // CONSTRUCTORS ---------------------
-  ThemeTestView({super.key, required super.pCtrl});
+  ThemeTestView({super.key, required String pTag})
+    : super(pCtrl: Get.find<ThemeTestViewCtrl>(tag: pTag));
 }
 
 class ThemeTestBinding extends Bindings {
@@ -34,6 +35,8 @@ class ThemeTestBinding extends Bindings {
     ThemeTestViewState state = ThemeTestViewState();
     // Crea el controlador de la vista.
     ThemeTestViewCtrl ctrl = ThemeTestViewCtrl(pState: state);
+    // Get.put<ThemeTestViewCtrl>(ctrl, tag: ctrl.tag, permanent: true);
+    // Afegeix el controlador a la cua de prioritat
     Get.parameters[parmElm] = ctrl.tag;
   }
 }

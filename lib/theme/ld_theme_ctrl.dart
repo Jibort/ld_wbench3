@@ -4,10 +4,11 @@
 import 'dart:ui';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:ld_wbench3/core/ld_ctrl.dart';
-import 'package:ld_wbench3/tools/debug.dart';
 
-class LdThemeCtrl extends LdCtrl {
+import 'package:ld_wbench3/tools/debug.dart';
+import 'package:ld_wbench3/core/ld_id_mixin.dart';
+
+class LdThemeCtrl extends GetxController with LdIdMixin {
   // 📝 ESTÀTICS -----------------------
   static bool enabled = false;
   static late final LdThemeCtrl? _single;
@@ -28,19 +29,25 @@ class LdThemeCtrl extends LdCtrl {
   late bool _isDarkMode = false;
 
   // 🛠️ CONSTRUCTORS -------------------
-  LdThemeCtrl() : super(pTag: ctrlTag);
+  LdThemeCtrl() {
+    tag = ctrlTag;
+    typeName = className;
+  } // : super(pTag: ctrlTag);
 
   void init() {
     // Detectar el mode actual del sistema
-    _isDarkMode = Get.isDarkMode;
+    // _isDarkMode = Get.isDarkMode;
+    final platformBrightness = PlatformDispatcher.instance.platformBrightness;
+    _isDarkMode = platformBrightness == Brightness.dark;
 
     // Inicialitzar _themeMode basat en la configuració del sistema
-    _themeMode = Get.isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    // _themeMode = Get.isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    _themeMode = _isDarkMode ? ThemeMode.dark : ThemeMode.light;
 
     // Si l'aplicació està seguint el tema del sistema
-    if (Get.isPlatformDarkMode) {
-      _themeMode = ThemeMode.system;
-    }
+    // if (Get.isPlatformDarkMode) {
+    //   _themeMode = ThemeMode.system;
+    // }
   }
 
   // 📥 GETTERS/SETTERS ----------------
@@ -212,14 +219,23 @@ class LdThemeCtrl extends LdCtrl {
       DebugLevel.debug_2,
       "Canviant mode de tema a: ${mode.toString()}",
     );
+    // _themeMode = mode;
+
+    // _isDarkMode =
+    //     (mode == ThemeMode.system) ? Get.isDarkMode : (mode == ThemeMode.dark);
+
+    // Get.changeThemeMode(mode);
+
+    // // Actualitzar tots els GetBuilder's que escolten canvis sobre el tema.
+    // update();
+
     _themeMode = mode;
-
     _isDarkMode =
-        (mode == ThemeMode.system) ? Get.isDarkMode : (mode == ThemeMode.dark);
+        (mode == ThemeMode.system)
+            ? PlatformDispatcher.instance.platformBrightness == Brightness.dark
+            : (mode == ThemeMode.dark);
 
-    Get.changeThemeMode(mode);
-
-    // Actualitzar tots els GetBuilder's que escolten canvis sobre el tema.
+    // Notificar a los oyentes
     update();
   }
 

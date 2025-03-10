@@ -41,6 +41,8 @@ class LdAppBarWidget extends LdWidget<LdAppBarWidgetCtrl>
     this.backgroundColor,
     this.foregroundColor,
   }) : super(key: key ?? const Key(appBarIdx), pViewCtrl: viewCtrl) {
+    tag = widgetTag;
+    typeName = className;
     ctrl = LdAppBarWidgetCtrl(pTag: widgetTag, pViewCtrl: viewCtrl);
   }
 

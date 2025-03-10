@@ -30,7 +30,14 @@ class ThemeTestViewCtrl
   // Botons d'acció ------------------
   void toggleTheme() {
     LdThemeCtrl.single.toggleTheme();
-    notify();
+    notify(
+      pTgts: [
+        scaffoldIdx,
+        appBarIdx,
+        appBarProgressIdx,
+        LdThemeCtrl.single.tag,
+      ],
+    );
   }
 
   void setLightTheme() {
