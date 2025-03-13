@@ -1,31 +1,39 @@
 // Widget embolcall per a l'AppBar de l'aplicació.
-// Created: 2025/03/06 dj.
+// Actualitzat: 2025/03/10 dl. CLA[JIQ]
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ld_wbench3/core/ld_view.dart';
 import 'package:ld_wbench3/core/ld_widget.dart';
+import 'package:ld_wbench3/tools/null_mang.dart';
 import 'package:ld_wbench3/widgets/widget_key.dart';
 import 'package:ld_wbench3/theme/text_styles.dart';
+import 'package:ld_wbench3/trans/tr.dart';
+import 'package:ld_wbench3/tools/consts/ui.dart';
+import 'package:ld_wbench3/core/ld_state.dart';
 
 // WIDGET 'LdAppBarWidget' ============
 class LdAppBarWidget extends LdWidget<LdAppBarWidgetCtrl>
     implements PreferredSizeWidget {
   // 📝 ESTÀTICS -----------------------
   static const String className = "LdAppBarWidget";
-  static const String widgetTag = "ldAppBarWidgetTag";
+  static const String widgetTag = appBarIdx;
 
   // 🧩 MEMBRES ------------------------
-  GetBuilder<LdAppBarWidgetCtrl>? _getBuilder;
   final String title;
   final String? subtitle;
   final List<Widget>? actions;
   final bool showProgress;
-  final double progress;
+  final double? progress;
   final bool automaticallyImplyLeading;
   final Widget? leading;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final bool showDrawerIcon;
+  final bool showBackButton;
+  final double actionsRightMargin;
+  final double actionButtonsSpacing;
 
   // CONSTRUCTOR ---------------------
   LdAppBarWidget({
@@ -35,73 +43,230 @@ class LdAppBarWidget extends LdWidget<LdAppBarWidgetCtrl>
     this.subtitle,
     this.actions,
     this.showProgress = false,
-    this.progress = 0.0,
+    this.progress,
     this.automaticallyImplyLeading = true,
     this.leading,
     this.backgroundColor,
     this.foregroundColor,
-  }) : super(key: key ?? const Key(appBarIdx), pViewCtrl: viewCtrl) {
+    this.showDrawerIcon = false,
+    this.showBackButton = false,
+    double? pActionsRightMargin,
+    double? pActionButtonsSpacing,
+  }) : actionsRightMargin = pActionsRightMargin ?? defActionsRightMargin,
+       actionButtonsSpacing = pActionButtonsSpacing ?? defActionButtonsSpacing,
+       super(key: key ?? const Key(appBarIdx), pViewCtrl: viewCtrl) {
     tag = widgetTag;
     typeName = className;
-    ctrl = LdAppBarWidgetCtrl(pTag: widgetTag, pViewCtrl: viewCtrl);
-  }
-
-  @override
-  Widget build(BuildContext pBCtx) {
-    final theme = Theme.of(pBCtx);
-    _getBuilder ??= GetBuilder<LdAppBarWidgetCtrl>(
-      id: ctrl.tag,
-      tag: ctrl.tag,
-      builder:
-          (appBarCtrl) => AppBar(
-            automaticallyImplyLeading: automaticallyImplyLeading,
-            leading: leading,
-            backgroundColor:
-                backgroundColor ?? theme.appBarTheme.backgroundColor,
-            foregroundColor:
-                foregroundColor ?? theme.appBarTheme.foregroundColor,
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: txsAppBarTitleStyle()),
-                if (subtitle != null)
-                  Text(subtitle!, style: txsAppBarSubtitleStyle()),
-              ],
-            ),
-            actions: actions,
-            bottom:
-                showProgress
-                    ? PreferredSize(
-                      preferredSize: const Size.fromHeight(2.0),
-                      child: LinearProgressIndicator(
-                        value: progress > 0 ? progress : null,
-                      ),
-                    )
-                    : null,
-          ),
+    ctrl = LdAppBarWidgetCtrl(
+      pTag: tag,
+      pViewCtrl: viewCtrl,
+      pTitle: title,
+      pSubtitle: subtitle,
+      pShowProgress: showProgress,
+      pProgress: progress,
+      pShowDrawerIcon: showDrawerIcon,
+      pShowBackButton: showBackButton,
+      pActions: actions,
+      pActionsRightMargin: actionsRightMargin,
+      pActionButtonsSpacing: actionButtonsSpacing,
     );
-    return _getBuilder!;
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-// CTRL 'LdAppBarWidget' ==============
+// CTRL 'LdAppBarWidgetCtrl' ==============
 class LdAppBarWidgetCtrl extends LdWidgetCtrl {
   // 📝 STATICS ------------------------
   static const className = "LdAppBarWidgetCtrl";
 
+  // 🧩 MEMBRES --------------------------
+  GetBuilder<LdWidgetCtrl>? _progressBuilder;
+
+  final String title;
+  final String? subtitle;
+  final List<Widget>? actions;
+  final bool showProgress;
+  final double? progress;
+  final bool showDrawerIcon;
+  final bool showBackButton;
+  final double actionsRightMargin;
+  final double actionButtonsSpacing;
+
   // 🛠️ CONSTRUCTORS ---------------------
-  LdAppBarWidgetCtrl({required super.pTag, required super.pViewCtrl});
+  LdAppBarWidgetCtrl({
+    required super.pTag,
+    required super.pViewCtrl,
+    required String pTitle,
+    String? pSubtitle,
+    bool pShowProgress = false,
+    double? pProgress,
+    bool pShowDrawerIcon = false,
+    bool pShowBackButton = false,
+    List<Widget>? pActions,
+    required double pActionsRightMargin,
+    required double pActionButtonsSpacing,
+  }) : title = pTitle,
+       subtitle = pSubtitle,
+       showProgress = pShowProgress,
+       progress = pProgress,
+       showDrawerIcon = pShowDrawerIcon,
+       showBackButton = pShowBackButton,
+       actions = pActions,
+       actionsRightMargin = pActionsRightMargin,
+       actionButtonsSpacing = pActionButtonsSpacing;
 
-  // 📥 GETTERS/SETTERS ----------------
+  // Construeix l'icona "leading" en funció de la configuració
+  Widget? buildLeadingIcon(BuildContext context) {
+    if (showBackButton) {
+      return IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () => Navigator.of(context).pop(),
+      );
+    } else if (showDrawerIcon) {
+      return IconButton(
+        icon: Icon(Icons.menu),
+        onPressed: () {
+          Scaffold.of(context).openDrawer();
+        },
+      );
+    }
+    return null;
+  }
 
-  // 🔄 'LdWidgetCtrl' -----------------
+  // Construeix la barra de progrés per l'estat de càrrega
+  Widget buildProgressContent(BuildContext context) {
+    _progressBuilder ??= GetBuilder<LdAppBarWidgetCtrl>(
+      id: appBarProgressIdx,
+      tag: appBarProgressIdx,
+      init: this,
+      builder: (ctrl) {
+        var stats = viewCtrl.state.stats;
+        String? loadingElement = Get.parameters[LdState.loadingElm];
+        if (loadingElement != null) {
+          Get.parameters.remove(LdState.loadingElm);
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "${Tr.loading.tr} ${(loadingElement != null) ? '\'$loadingElement\'' : '...'}",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            Text(
+              (stats.$3 != null)
+                  ? "${stats.$2} ${Tr.of.tr} ${stats.$1} (${(stats.$3! * 100).toStringAsPrecision(3)}%)"
+                  : "${stats.$2} ${Tr.of.tr} ${stats.$1}",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: viewCtrl.state.isError ? Colors.red : null,
+              ),
+            ),
+            LinearProgressIndicator(
+              minHeight: 5.0.h,
+              value: stats.$3,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return _progressBuilder!;
+  }
+
+  // Construeix el contingut normal de l'AppBar quan no està carregant
+  Widget buildNormalContent(BuildContext context) {
+    return _progressBuilder ??= GetBuilder<LdAppBarWidgetCtrl>(
+      id: appBarProgressIdx,
+      tag: appBarProgressIdx,
+      init: this,
+      builder:
+          (ctrl) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: txsAppBarTitleStyle()),
+              if (subtitle != null)
+                Text(
+                  subtitle!,
+                  style: TextStyle(
+                    color:
+                        viewCtrl.state.isError
+                            ? Colors.red
+                            : txsAppBarSubtitleStyle().color,
+                    fontSize: txsAppBarSubtitleStyle().fontSize,
+                    fontWeight: txsAppBarSubtitleStyle().fontWeight,
+                    fontStyle: txsAppBarSubtitleStyle().fontStyle,
+                    fontFamily: txsAppBarSubtitleStyle().fontFamily,
+                  ),
+                ),
+            ],
+          ),
+    );
+  }
+
+  // 'LdWdiget' -----------------------
   @override
-  Widget buildWidget(BuildContext pCtx) {
-    // Aquest mètode no s'utilitza directament perquè la construcció
-    // es fa en el mètode build de LdAppBarWidget
-    return Container();
+  void rebuildFromScrath() {
+    // _getBuilder = null;
+    // _progressBuilder = null;
+  }
+
+  @override
+  Widget buildWidget(BuildContext pBCtx) {
+    return GetBuilder<LdAppBarWidgetCtrl>(
+      id: appBarIdx,
+      tag: appBarIdx,
+      init: this,
+      builder: (appBarCtrl) {
+        final theme = Theme.of(pBCtx);
+        // Preparem accions amb espais entre elles i marge a la dreta si n'hi ha
+        List<Widget>? spacedActions;
+        if (actions != null && actions!.isNotEmpty) {
+          spacedActions = [];
+          // Afegim cada acció seguida d'un espai
+          for (int i = 0; i < actions!.length; i++) {
+            // Afegim l'acció
+            spacedActions.add(actions![i]);
+            // Si no és l'última, afegim un espai
+            if (i < actions!.length - 1) {
+              spacedActions.add(SizedBox(width: actionButtonsSpacing.w));
+            }
+          }
+          // Afegim el marge a la dreta
+          spacedActions.add(SizedBox(width: actionsRightMargin.w));
+        }
+
+        return AppBar(
+          automaticallyImplyLeading: true,
+          leading: buildLeadingIcon(pBCtx),
+          backgroundColor:
+              theme.brightness == Brightness.dark
+                  ? Colors.blueGrey[800] // Color fosc per al tema fosc
+                  : theme.colorScheme.primary,
+          foregroundColor: theme.colorScheme.onPrimary,
+          title:
+              (showProgress)
+                  ? buildProgressContent(pBCtx)
+                  : buildNormalContent(pBCtx),
+          actions: spacedActions,
+          bottom:
+              showProgress && isNotNull(progress)
+                  ? PreferredSize(
+                    preferredSize: const Size.fromHeight(2.0),
+                    child: LinearProgressIndicator(value: progress),
+                  )
+                  : null,
+        );
+      },
+    );
+    // return _getBuilder!;
   }
 }

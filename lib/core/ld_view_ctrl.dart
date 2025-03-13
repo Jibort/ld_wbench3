@@ -14,12 +14,12 @@ abstract class LdViewCtrl<
   // 📝 ESTÀTICS -----------------------
   static final String className = "LdViewCtrl";
 
-  // 🧩 MEMBRES --------------------------
+  // 🧩 MEMBRES ------------------------
   final S _vState;
   final List<String> wgIds = <String>[];
 
-  // 🛠️ CONSTRUCTORS ---------------------
-  LdViewCtrl({required S pViewState, required super.pTag})
+  // 🛠️ CONSTRUCTORS ------------------
+  LdViewCtrl({required super.pTag, required S pViewState})
     : _vState = pViewState {
     _vState.ctrl = this as C;
     if (state.isNew) {

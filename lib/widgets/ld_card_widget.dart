@@ -13,7 +13,7 @@ class LdCardWidget extends LdWidget<LdCardWidgetCtrl> {
   static const String className = "LdCardWidget";
   static const String widgetTag = "ldCardWidgetTag";
 
-  // MEMBRES --------------------------
+  // 🧩 MEMBRES --------------------------
   GetBuilder<LdCardWidgetCtrl>? _getBuilder;
   final Widget child;
   final double? elevation;
@@ -24,7 +24,7 @@ class LdCardWidget extends LdWidget<LdCardWidgetCtrl> {
   final BorderRadius? borderRadius;
   final VoidCallback? onTap;
 
-  // CONSTRUCTOR ---------------------
+  // 🛠️ CONSTRUCTORS ---------------------
   LdCardWidget({
     super.key,
     required LdViewCtrl viewCtrl,
@@ -36,15 +36,15 @@ class LdCardWidget extends LdWidget<LdCardWidgetCtrl> {
     this.shadowColor,
     this.borderRadius,
     this.onTap,
-    String? customTag,
+    String? pTag,
   }) : super(pViewCtrl: viewCtrl) {
     tag =
-        customTag ??
+        pTag ??
         "${widgetTag}_${viewCtrl.tag}_${DateTime.now().millisecondsSinceEpoch}";
     typeName = className;
     ctrl = LdCardWidgetCtrl(
       pTag:
-          customTag ??
+          pTag ??
           "${widgetTag}_${viewCtrl.tag}_${DateTime.now().millisecondsSinceEpoch}",
       pViewCtrl: viewCtrl,
     );
@@ -55,6 +55,7 @@ class LdCardWidget extends LdWidget<LdCardWidgetCtrl> {
     _getBuilder ??= GetBuilder<LdCardWidgetCtrl>(
       id: ctrl.tag,
       tag: ctrl.tag,
+      init: ctrl,
       builder:
           (cardCtrl) => Card(
             elevation: elevation,
@@ -88,7 +89,12 @@ class LdCardWidgetCtrl extends LdWidgetCtrl {
   // CONSTRUCTOR ---------------------
   LdCardWidgetCtrl({required super.pTag, required super.pViewCtrl});
 
-  // Construir el widget
+  // 'LdWdiget' -----------------------
+  @override
+  void rebuildFromScrath() {
+    // No hi ha builders a anul·lar.
+  }
+
   @override
   Widget buildWidget(BuildContext pCtx) {
     // Aquest mètode no s'utilitza directament perquè la construcció

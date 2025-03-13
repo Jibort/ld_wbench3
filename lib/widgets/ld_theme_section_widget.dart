@@ -13,21 +13,14 @@ class LdThemeSectionWidget extends LdWidget<LdThemeSectionWidgetCtrl> {
   static const String className = "LdThemeSectionWidget";
   static const String widgetTag = "${className}_tag";
 
-  // MEMBRES --------------------------
-  GetBuilder<LdThemeSectionWidgetCtrl>? _getBuilder;
-  final String title;
-  final Widget child;
-  final EdgeInsetsGeometry? padding;
-  final EdgeInsetsGeometry? margin;
-
-  // CONSTRUCTOR ---------------------
+  // 🛠️ CONSTRUCTORS ---------------------
   LdThemeSectionWidget({
     super.key,
     required LdViewCtrl viewCtrl,
-    required this.title,
-    required this.child,
-    this.padding,
-    this.margin,
+    required String pTitle,
+    required Widget pChild,
+    EdgeInsetsGeometry? pPadding,
+    EdgeInsetsGeometry? pMargin,
     String? customTag,
   }) : super(pViewCtrl: viewCtrl) {
     tag = widgetTag;
@@ -37,14 +30,47 @@ class LdThemeSectionWidget extends LdWidget<LdThemeSectionWidgetCtrl> {
           customTag ??
           "${widgetTag}_${viewCtrl.tag}_${DateTime.now().millisecondsSinceEpoch}",
       pViewCtrl: viewCtrl,
+      title: pTitle,
+      child: pChild,
+      padding: pPadding,
+      margin: pMargin,
     );
+  }
+}
+
+class LdThemeSectionWidgetCtrl extends LdWidgetCtrl {
+  // 📝 ESTÀTICS -----------------------
+  static const className = "LdThemeSectionWidgetCtrl";
+
+  // 🧩 MEMBRES --------------------------
+  GetBuilder<LdThemeSectionWidgetCtrl>? _getBuilder;
+  final String title;
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
+
+  // CONSTRUCTOR ---------------------
+  LdThemeSectionWidgetCtrl({
+    required super.pTag,
+    required super.pViewCtrl,
+    required this.title,
+    required this.child,
+    this.padding,
+    this.margin,
+  });
+
+  // 'LdWdiget' -----------------------
+  @override
+  void rebuildFromScrath() {
+    _getBuilder = null;
   }
 
   @override
-  Widget build(BuildContext pBCtx) {
+  Widget buildWidget(BuildContext pCtx) {
     _getBuilder ??= GetBuilder<LdThemeSectionWidgetCtrl>(
-      id: ctrl.tag,
-      tag: ctrl.tag,
+      id: tag,
+      tag: tag,
+      init: this,
       builder:
           (sectionCtrl) => Container(
             margin: margin ?? EdgeInsets.only(bottom: 24.0.h),
@@ -67,21 +93,5 @@ class LdThemeSectionWidget extends LdWidget<LdThemeSectionWidgetCtrl> {
           ),
     );
     return _getBuilder!;
-  }
-}
-
-class LdThemeSectionWidgetCtrl extends LdWidgetCtrl {
-  // 📝 ESTÀTICS -----------------------
-  static const className = "LdThemeSectionWidgetCtrl";
-
-  // CONSTRUCTOR ---------------------
-  LdThemeSectionWidgetCtrl({required super.pTag, required super.pViewCtrl});
-
-  // Construir el widget
-  @override
-  Widget buildWidget(BuildContext pCtx) {
-    // Aquest mètode no s'utilitza directament perquè la construcció
-    // es fa en el mètode build de LdThemeSectionWidget
-    return Container();
   }
 }

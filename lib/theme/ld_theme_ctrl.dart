@@ -55,17 +55,23 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
   bool get isDarkMode => _isDarkMode;
 
   // COLORS constants per a referència
-  static const Color primaryLight = Color(0xFF2196F3); // Blau
-  static const Color primaryDark = Color(0xFF1565C0); // Blau fosc
+  static const Color primaryLight = Color(
+    0xFF4B70A5,
+  ); // Blau mitjà de la barra de navegació
+  static const Color primaryDark = Color(
+    0xFF2D3B57,
+  ); // Blau fosc de la capçalera
 
-  static const Color secondaryLight = Color(0xFFFF9800); // Taronja
-  static const Color secondaryDark = Color(0xFFFF5722); // Taronja fosc
+  static const Color secondaryLight = Color(
+    0xFFE8C074,
+  ); // To daurat/ataronjat del fons de la imatge
+  static const Color secondaryDark = Color(0xFFD9A440); // To daurat més fosc
 
   static const Color backgroundLight = Color(0xFFF5F5F5); // Gris molt clar
-  static const Color backgroundDark = Color(0xFF121212); // Gris molt fosc
+  static const Color backgroundDark = Color(0xFF273042); // Blau molt fosc
 
   static const Color surfaceLight = Color(0xFFFFFFFF); // Blanc
-  static const Color surfaceDark = Color(0xFF1E1E1E); // Gris fosc
+  static const Color surfaceDark = Color(0xFF2F3A52); // Blau fosc grisós
 
   static const Color errorLight = Color(0xFFB00020); // Vermell
   static const Color errorDark = Color(0xFFCF6679); // Rosa vermellós
@@ -81,9 +87,7 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       primary: primaryLight,
       onPrimary: Colors.white,
       secondary: secondaryLight,
-      onSecondary: Colors.black,
-      // background: backgroundLight,
-      // onBackground: Colors.black87,
+      onSecondary: Colors.black87,
       surface: surfaceLight,
       onSurface: Colors.black87,
       error: errorLight,
@@ -92,26 +96,43 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
 
     // Colors específics per a components
     scaffoldBackgroundColor: backgroundLight,
-    appBarTheme: AppBarTheme(
-      backgroundColor: primaryLight,
-      foregroundColor: Colors.white,
-      elevation: 4,
+
+    textTheme: TextTheme(
+      // Específicament canviem l'estil del títol a blanc
+      headlineLarge: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineMedium: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
+      // També afegim l'estil per a subtítols
+      titleLarge: TextStyle(color: Colors.white),
     ),
+
     cardTheme: CardTheme(
       color: surfaceLight,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     ),
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: primaryLight,
         foregroundColor: Colors.white,
+        elevation: 6, // Més elevació en tema clar
+        shadowColor: Colors.black.withAlpha((0.5 * 255.0).round()),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
+
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: primaryLight,
       foregroundColor: Colors.white,
     ),
+
     inputDecorationTheme: InputDecorationTheme(
       fillColor: Colors.white,
       filled: true,
@@ -128,6 +149,7 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
         borderSide: BorderSide(color: primaryLight, width: 2),
       ),
     ),
+
     checkboxTheme: CheckboxThemeData(
       fillColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.selected)) {
@@ -137,9 +159,23 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       }),
       checkColor: WidgetStateProperty.all(Colors.white),
     ),
+
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: primaryLight,
       linearTrackColor: Colors.grey.shade200,
+    ),
+
+    appBarTheme: AppBarTheme(
+      backgroundColor: primaryLight,
+      foregroundColor: Colors.white,
+      elevation: 4,
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
+      // Assegurem que tots els textos de l'AppBar siguin blancs
+      toolbarTextStyle: TextStyle(color: Colors.white),
     ),
   );
 
@@ -152,8 +188,6 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       onPrimary: Colors.white,
       secondary: secondaryDark,
       onSecondary: Colors.white,
-      // background: backgroundDark,
-      // onBackground: Colors.white,
       surface: surfaceDark,
       onSurface: Colors.white,
       error: errorDark,
@@ -161,27 +195,46 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
     ),
 
     // Colors específics per a components
-    scaffoldBackgroundColor: backgroundDark,
-    appBarTheme: AppBarTheme(
-      backgroundColor: surfaceDark,
-      foregroundColor: Colors.white,
-      elevation: 4,
+    scaffoldBackgroundColor: Color(0xFF1E2433),
+
+    textTheme: TextTheme(
+      // Específicament canviem l'estil del títol a blanc
+      headlineLarge: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
+      headlineMedium: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+      ),
+      // També afegim l'estil per a subtítols
+      titleLarge: TextStyle(color: Colors.white),
     ),
+
     cardTheme: CardTheme(
       color: surfaceDark,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     ),
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: primaryDark,
+        backgroundColor: Color.fromARGB(255, 89, 124, 172),
         foregroundColor: Colors.white,
+        elevation: 8, // Elevació encara més alta en tema fosc
+        shadowColor: Colors.black.withAlpha(
+          (0.7 * 255.0).round(),
+        ), // withOpacity(0.7), // Ombra més visible
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
+
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: primaryDark,
       foregroundColor: Colors.white,
     ),
+
     inputDecorationTheme: InputDecorationTheme(
       fillColor: Color(0xFF2C2C2C), // Un gris fosc per als inputs
       filled: true,
@@ -198,6 +251,7 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
         borderSide: BorderSide(color: primaryDark, width: 2),
       ),
     ),
+
     checkboxTheme: CheckboxThemeData(
       fillColor: WidgetStateProperty.resolveWith<Color>((states) {
         if (states.contains(WidgetState.selected)) {
@@ -207,9 +261,22 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       }),
       checkColor: WidgetStateProperty.all(Colors.white),
     ),
+
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: primaryDark,
       linearTrackColor: Colors.grey.shade800,
+    ),
+
+    appBarTheme: AppBarTheme(
+      backgroundColor: primaryDark,
+      foregroundColor: Colors.white, // Text blanc per la AppBar
+      elevation: 4,
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: FontWeight.bold, // Títol en negreta
+      ),
+      toolbarTextStyle: TextStyle(color: Colors.white),
     ),
   );
 
@@ -219,15 +286,6 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       DebugLevel.debug_2,
       "Canviant mode de tema a: ${mode.toString()}",
     );
-    // _themeMode = mode;
-
-    // _isDarkMode =
-    //     (mode == ThemeMode.system) ? Get.isDarkMode : (mode == ThemeMode.dark);
-
-    // Get.changeThemeMode(mode);
-
-    // // Actualitzar tots els GetBuilder's que escolten canvis sobre el tema.
-    // update();
 
     _themeMode = mode;
     _isDarkMode =
@@ -235,7 +293,8 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
             ? PlatformDispatcher.instance.platformBrightness == Brightness.dark
             : (mode == ThemeMode.dark);
 
-    // Notificar a los oyentes
+    // Canviar el tema i notificar a los oyentes
+    Get.changeThemeMode(mode);
     update();
   }
 
@@ -269,6 +328,15 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
         );
         _isDarkMode = newIsDarkMode;
         update([ctrlTag]);
+      }
+    }
+  }
+
+  // 📢 NOTIFICACIONS ------------------
+  void notify({List<String>? pTgts}) {
+    if (pTgts != null) {
+      for (var wgId in pTgts) {
+        update([wgId], true);
       }
     }
   }

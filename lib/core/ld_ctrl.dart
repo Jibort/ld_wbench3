@@ -14,7 +14,6 @@ abstract class LdCtrl extends GetxController with LdIdMixin {
 
   // 🛠️ CONSTRUCTORS -------------------
   LdCtrl({required String pTag}) {
-    // Iniciem els membres de LdIdMixin
     tag = pTag;
     typeName = className;
 
@@ -54,6 +53,11 @@ abstract class LdCtrl extends GetxController with LdIdMixin {
   void notify({List<String>? pTgts}) {
     if (pTgts != null) {
       for (var wgId in pTgts) {
+        try {
+          LdWidgetCtrl ctrl = Get.find(tag: wgId);
+          ctrl.rebuildFromScrath();
+          ctrl.buildWidget(Get.context!);
+        } catch (_) {}
         update([wgId], true);
       }
     }

@@ -78,3 +78,4 @@
 16. > **git** _commit -m "Inici del projecte"_
 17. > **git** _branch -M main_
 18. > **git** _push -u origin main_
+19. Filtrar el log de debug amb _!libEGL,!EGL_emulation_

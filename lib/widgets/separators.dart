@@ -9,7 +9,7 @@ class VertSep extends StatelessWidget {
   // MEMBERS --------------------------
   final double sep;
 
-  // CONSTRUCTORS ---------------------
+  // 🛠️ CONSTRUCTORS ---------------------
   const VertSep(this.sep, {super.key});
 
   // 'StatelessWidget' ----------------
@@ -22,7 +22,7 @@ class HortSep extends StatelessWidget {
   // MEMBERS --------------------------
   final double sep;
 
-  // CONSTRUCTORS ---------------------
+  // 🛠️ CONSTRUCTORS ---------------------
   const HortSep(this.sep, {super.key});
 
   // 'StatelessWidget' ----------------

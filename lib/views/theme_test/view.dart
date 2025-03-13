@@ -6,36 +6,43 @@
 import 'package:get/get.dart';
 import 'package:ld_wbench3/core/ld_view.dart';
 import 'package:ld_wbench3/theme/ld_theme_ctrl.dart';
-import 'package:ld_wbench3/views/theme_test/controller.dart';
+import 'package:ld_wbench3/tools/consts/ui.dart';
 import 'package:ld_wbench3/views/theme_test/state.dart';
+import 'package:ld_wbench3/views/theme_test/controller.dart';
 
 export 'controller.dart';
 export 'state.dart';
-
-const String parmElm = "parmElm";
 
 class ThemeTestView extends LdView<ThemeTestViewState, ThemeTestViewCtrl> {
   // 📝 ESTÀTICS -----------------------
   static const className = "ThemeTestView";
   static const routeName = "/theme-test";
+  static const viewTag = "${className}_tag";
 
-  // CONSTRUCTORS ---------------------
+  // 🛠️ CONSTRUCTORS ------------------
   ThemeTestView({super.key, required String pTag})
     : super(pCtrl: Get.find<ThemeTestViewCtrl>(tag: pTag));
 }
 
 class ThemeTestBinding extends Bindings {
+  // 'Bindinds' -----------------------
   @override
   void dependencies() {
     // Asegurem que el controlador de temes està registrat.
     LdThemeCtrl.single;
+
     // Si és necessari recupera arguments per a la creació de l'estat.
     // ...
+
     // Crea l'estat de la vista.
     ThemeTestViewState state = ThemeTestViewState();
     // Crea el controlador de la vista.
-    ThemeTestViewCtrl ctrl = ThemeTestViewCtrl(pState: state);
-    // Get.put<ThemeTestViewCtrl>(ctrl, tag: ctrl.tag, permanent: true);
+
+    ThemeTestViewCtrl ctrl = ThemeTestViewCtrl(
+      pTag: ThemeTestView.viewTag,
+      pViewState: state,
+    );
+
     // Afegeix el controlador a la cua de prioritat
     Get.parameters[parmElm] = ctrl.tag;
   }

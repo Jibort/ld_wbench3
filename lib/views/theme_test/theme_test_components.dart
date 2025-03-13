@@ -7,6 +7,7 @@ import 'package:ld_wbench3/core/ld_widget.dart';
 import 'package:ld_wbench3/theme/ld_theme_ctrl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ld_wbench3/views/theme_test/controller.dart';
+import 'package:ld_wbench3/widgets/ld_button_widget.dart';
 import 'package:ld_wbench3/widgets/ld_card_widget.dart';
 import 'package:ld_wbench3/widgets/ld_theme_section_widget.dart';
 import 'package:ld_wbench3/widgets/separators.dart';
@@ -32,14 +33,19 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
   static const className = "ThemeTestComponentsCtrl";
   static const ctrlTag = "${className}_ctrl";
 
-  // MEMBRES --------------------------
+  // 🧩 MEMBRES --------------------------
   bool showAllComponents = true;
   bool isThemeSwitching = false;
 
   // CONSTRUCTOR ---------------------
   ThemeTestComponentsCtrl({required super.pTag, required super.pViewCtrl});
 
-  // Construir la vista
+  // 'LdWdiget' -----------------------
+  @override
+  void rebuildFromScrath() {
+    // No hi ha builders a anul·lar.
+  }
+
   @override
   Widget buildWidget(BuildContext pBCtx) {
     bool isDarkMode = LdThemeCtrl.single.isDarkMode;
@@ -68,9 +74,9 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
   Widget _buildThemeSwitchSection() {
     return LdThemeSectionWidget(
       viewCtrl: viewCtrl,
-      title: 'Configuració del tema',
+      pTitle: 'Configuració del tema',
       customTag: '${LdThemeSectionWidget.widgetTag}_config',
-      child: Row(
+      pChild: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           _buildThemeButton(
@@ -135,9 +141,9 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
   Widget _buildColorShowcase(bool isDarkMode, ThemeData theme) {
     return LdThemeSectionWidget(
       viewCtrl: viewCtrl,
-      title: 'Colors del tema',
       customTag: '${LdThemeSectionWidget.widgetTag}_colors',
-      child: Wrap(
+      pTitle: 'Colors del tema',
+      pChild: Wrap(
         spacing: 8.0.w,
         runSpacing: 8.0.h,
         children: [
@@ -195,33 +201,80 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
   Widget _buildButtonsShowcase(ThemeData theme) {
     return LdThemeSectionWidget(
       viewCtrl: viewCtrl,
-      title: 'Botons',
       customTag: '${LdThemeSectionWidget.widgetTag}_buttons',
-      child: Column(
+      pTitle: 'Botons',
+      pChild: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton(onPressed: () {}, child: Text('Elevated Button')),
-              OutlinedButton(onPressed: () {}, child: Text('Outlined Button')),
-              TextButton(onPressed: () {}, child: Text('Text Button')),
+              LdButtonWidget(
+                viewCtrl: viewCtrl,
+                text: 'Elevated',
+                type: LdButtonType.elevated,
+                onPressed: () {},
+              ),
+              // Botó outline
+              LdButtonWidget(
+                viewCtrl: viewCtrl,
+                text: 'Outlined',
+                type: LdButtonType.outlined,
+                onPressed: () {},
+              ),
+              // Botó text
+              LdButtonWidget(
+                viewCtrl: viewCtrl,
+                text: 'Text',
+                type: LdButtonType.text,
+                onPressed: () {},
+              ),
             ],
           ),
           VertSep(16.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton.icon(
+              LdButtonWidget.icon(
+                viewCtrl: viewCtrl,
+                text: 'Elevated',
+                type: LdButtonType.elevated,
                 onPressed: () {},
-                icon: Icon(Icons.save),
-                label: Text('Desar'),
+                iconData: Icons.elevator_outlined,
               ),
-              OutlinedButton.icon(
+              // Botó outline
+              LdButtonWidget.icon(
+                viewCtrl: viewCtrl,
+                text: 'Outlined',
+                type: LdButtonType.outlined,
                 onPressed: () {},
-                icon: Icon(Icons.delete),
-                label: Text('Eliminar'),
+                iconData: Icons.outlined_flag_sharp,
               ),
-              IconButton(onPressed: () {}, icon: Icon(Icons.favorite)),
+              // Botó text
+              LdButtonWidget.icon(
+                viewCtrl: viewCtrl,
+                text: 'Text',
+                type: LdButtonType.text,
+                onPressed: () {},
+                iconData: Icons.text_fields_rounded,
+              ),
+              // ElevatedButton.icon(
+              //   onPressed: () {},
+              //   icon: Icon(Icons.save),
+              //   label: Text('Desar'),
+              // ),
+              // OutlinedButton.icon(
+              //   onPressed: () {},
+              //   icon: Icon(
+              //     Icons.delete,
+              //     color:
+              //         Theme.of(Get.context!).brightness == Brightness.dark
+              //             ? Colors
+              //                 .lightBlueAccent // Color més clar per tema fosc
+              //             : Colors.blue, // Color normal per tema clar
+              //   ),
+              //   label: Text('Eliminar'),
+              // ),
+              // IconButton(onPressed: () {}, icon: Icon(Icons.favorite)),
             ],
           ),
         ],
@@ -232,9 +285,9 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
   Widget _buildInputsShowcase(ThemeData theme) {
     return LdThemeSectionWidget(
       viewCtrl: viewCtrl,
-      title: 'Entrades de text i controls',
       customTag: '${LdThemeSectionWidget.widgetTag}_inputs',
-      child: Column(
+      pTitle: 'Entrades de text i controls',
+      pChild: Column(
         children: [
           TextField(
             decoration: InputDecoration(
@@ -271,9 +324,9 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
   Widget _buildCardsShowcase(ThemeData theme) {
     return LdThemeSectionWidget(
       viewCtrl: viewCtrl,
-      title: 'Targetes',
       customTag: '${LdThemeSectionWidget.widgetTag}_cards',
-      child: Column(
+      pTitle: 'Targetes',
+      pChild: Column(
         children: [
           LdCardWidget(
             viewCtrl: viewCtrl,
@@ -334,9 +387,9 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
   Widget _buildProgressIndicatorsShowcase(ThemeData theme) {
     return LdThemeSectionWidget(
       viewCtrl: viewCtrl,
-      title: 'Indicadors de progrés',
       customTag: '${LdThemeSectionWidget.widgetTag}_progress',
-      child: Row(
+      pTitle: 'Indicadors de progrés',
+      pChild: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Column(

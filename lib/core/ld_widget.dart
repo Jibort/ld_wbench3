@@ -16,11 +16,10 @@ export 'package:ld_wbench3/core/ld_widget_ctrl.dart';
 abstract class LdWidget<C extends LdWidgetCtrl> extends GetWidget<C>
     with LdIdMixin {
   // 🧩 MEMBRES ------------------------
-  // Builder base per a l'actualització per canvis en el tema.
-  GetBuilder<LdThemeCtrl>? _getBuilder;
   // Cotrolador de la vista on es renderitza el Widget.
   final LdViewCtrl _viewCtrl;
-  late final C _ctrl; // Controlador del Widget.
+  // Controlador del Widget.
+  late final C _ctrl;
 
   // CONSTRUCTOR ------------------
   LdWidget({super.key, required LdViewCtrl pViewCtrl}) : _viewCtrl = pViewCtrl;
@@ -35,13 +34,14 @@ abstract class LdWidget<C extends LdWidgetCtrl> extends GetWidget<C>
   // CONSTRUCCIÓ DE LA VISTA ----------
   @override
   Widget build(BuildContext pBCtx) {
-    _getBuilder ??= GetBuilder<LdThemeCtrl>(
-      id: LdThemeCtrl.ctrlTag,
+    return GetBuilder<LdThemeCtrl>(
+      id: tag,
       tag: LdThemeCtrl.ctrlTag,
-      builder: (pTCtrl) {
+      init: LdThemeCtrl.single,
+      builder: (_) {
+        ctrl.rebuildFromScrath();
         return _ctrl.buildWidget(pBCtx);
       },
     );
-    return _getBuilder!;
   }
 }

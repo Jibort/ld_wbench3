@@ -37,6 +37,7 @@ abstract class LdView<S extends LdViewState<S, C>, C extends LdViewCtrl<C, S>>
     _getBuilder ??= GetBuilder<C>(
       id: ctrl.tag,
       tag: ctrl.tag,
+      init: ctrl,
       builder: (vCtrl) => _ctrl.buildView(pCtx),
     );
     return _getBuilder!;

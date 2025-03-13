@@ -13,10 +13,10 @@ class ThemeTestViewState
   // 📝 ESTÀTICS -----------------------
   static const className = "ThemeTestViewState";
 
-  // MEMBRES --------------------------
+  // 🧩 MEMBRES --------------------------
   bool isThemeChanging = false;
 
-  // CONSTRUCTOR ---------------------
+  // 🛠️ CONSTRUCTORS ------------------
   ThemeTestViewState()
     : super(pTitle: Tr.sabinaApp.tr, pSubtitle: Tr.sabinaWelcome.tr);
 
