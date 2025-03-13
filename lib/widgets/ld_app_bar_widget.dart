@@ -48,6 +48,8 @@ class LdAppBarWidget extends LdWidget<LdAppBarWidgetCtrl>
     this.leading,
     this.backgroundColor,
     this.foregroundColor,
+    bool enabled = true,
+    bool focusable = false,
     this.showDrawerIcon = false,
     this.showBackButton = false,
     double? pActionsRightMargin,
@@ -64,6 +66,8 @@ class LdAppBarWidget extends LdWidget<LdAppBarWidgetCtrl>
       pSubtitle: subtitle,
       pShowProgress: showProgress,
       pProgress: progress,
+      pEnabled: enabled,
+      pFocusable: focusable,
       pShowDrawerIcon: showDrawerIcon,
       pShowBackButton: showBackButton,
       pActions: actions,
@@ -73,7 +77,7 @@ class LdAppBarWidget extends LdWidget<LdAppBarWidgetCtrl>
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 4.0.h);
 }
 
 // CTRL 'LdAppBarWidgetCtrl' ==============
@@ -104,6 +108,8 @@ class LdAppBarWidgetCtrl extends LdWidgetCtrl {
     double? pProgress,
     bool pShowDrawerIcon = false,
     bool pShowBackButton = false,
+    super.pEnabled = true,
+    super.pFocusable = false,
     List<Widget>? pActions,
     required double pActionsRightMargin,
     required double pActionButtonsSpacing,
@@ -214,10 +220,7 @@ class LdAppBarWidgetCtrl extends LdWidgetCtrl {
 
   // 'LdWdiget' -----------------------
   @override
-  void rebuildFromScrath() {
-    // _getBuilder = null;
-    // _progressBuilder = null;
-  }
+  void rebuildFromScrath() {}
 
   @override
   Widget buildWidget(BuildContext pBCtx) {

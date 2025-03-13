@@ -47,6 +47,7 @@ class LdCardWidget extends LdWidget<LdCardWidgetCtrl> {
           pTag ??
           "${widgetTag}_${viewCtrl.tag}_${DateTime.now().millisecondsSinceEpoch}",
       pViewCtrl: viewCtrl,
+      pFocusable: false,
     );
   }
 
@@ -87,7 +88,11 @@ class LdCardWidgetCtrl extends LdWidgetCtrl {
   static const className = "LdCardWidgetCtrl";
 
   // CONSTRUCTOR ---------------------
-  LdCardWidgetCtrl({required super.pTag, required super.pViewCtrl});
+  LdCardWidgetCtrl({
+    required super.pTag,
+    required super.pViewCtrl,
+    required super.pFocusable,
+  });
 
   // 'LdWdiget' -----------------------
   @override

@@ -1,3 +1,6 @@
+// Widget pels butons d'acció de l'AppBar.
+// Created: 2025/03/13 dv. JIQ
+
 import 'package:flutter/material.dart';
 import 'package:ld_wbench3/core/ld_view_state.dart';
 import 'package:ld_wbench3/core/ld_widget.dart';
@@ -11,17 +14,17 @@ class LdActionButtonWidget extends LdWidget<LdActionButtonWidgetCtrl> {
     super.key,
     required String pTag,
     String label = "",
-    bool pEnabled = true,
     required VoidCallback onPressed,
     IconData? icon,
     Color? iconColor,
     Color? backgroundColor,
     bool enabled = true,
+    bool focusable = false,
     double? iconSize,
     EdgeInsetsGeometry? padding,
     required super.pViewCtrl,
     required LdViewState pViewState,
-  }) {
+  }) : super(pEnabled: enabled, pFocusable: focusable) {
     tag = pTag; // "${pTag}_widget";
     typeName = className;
 
@@ -34,6 +37,7 @@ class LdActionButtonWidget extends LdWidget<LdActionButtonWidgetCtrl> {
       iconColor: iconColor,
       backgroundColor: backgroundColor,
       pEnabled: enabled,
+      pFocusable: focusable,
       iconSize: iconSize,
       padding: padding,
     );
@@ -41,6 +45,12 @@ class LdActionButtonWidget extends LdWidget<LdActionButtonWidgetCtrl> {
 
   // METHODS --------------------------
   bool get isEnabled => ctrl.isEnabled;
+  bool get isFocusable => ctrl.isFocusable;
+
+  void update([List<String>? tags]) {
+    ctrl.update(tags);
+  }
+
   set isEnabled(bool value) {
     ctrl.isEnabled = value;
     ctrl.notify();
@@ -59,7 +69,7 @@ class LdActionButtonWidgetCtrl extends LdWidgetCtrl {
   final double? iconSize;
   final EdgeInsetsGeometry? padding;
 
-  // 🛠️ CONSTRUCTORS ---------------------
+  // 🛠️ CONSTRUCTORS ------------------
   LdActionButtonWidgetCtrl({
     required super.pTag,
     required super.pViewCtrl,
@@ -68,12 +78,11 @@ class LdActionButtonWidgetCtrl extends LdWidgetCtrl {
     this.icon,
     this.iconColor,
     this.backgroundColor,
-    bool pEnabled = true,
+    super.pEnabled,
+    super.pFocusable = false,
     this.iconSize,
     this.padding,
-  }) {
-    isEnabled = pEnabled;
-  }
+  });
 
   // PUBLIC METHODS -------------------
   void trigger() {
@@ -152,6 +161,7 @@ class LdActionButtonWidgetCtrl extends LdWidgetCtrl {
           ),
           child: InkWell(
             onTap: isEnabled ? onPressed : null,
+            canRequestFocus: isFocusable,
             splashColor: defaultIconColor.withAlpha(30),
             highlightColor: defaultIconColor.withAlpha(20),
             child: Padding(
@@ -187,6 +197,7 @@ class LdActionButtonWidgetCtrl extends LdWidgetCtrl {
           ),
           child: InkWell(
             onTap: isEnabled ? onPressed : null,
+            canRequestFocus: isFocusable,
             splashColor: defaultIconColor.withAlpha(30),
             highlightColor: defaultIconColor.withAlpha(20),
             child: Padding(

@@ -23,7 +23,11 @@ class ThemeTestComponents extends LdWidget<ThemeTestComponentsCtrl> {
     : super(pViewCtrl: viewCtrl) {
     tag = widgetTag;
     typeName = className;
-    ctrl = ThemeTestComponentsCtrl(pTag: widgetTag, pViewCtrl: viewCtrl);
+    ctrl = ThemeTestComponentsCtrl(
+      pTag: widgetTag,
+      pViewCtrl: viewCtrl,
+      pFocusable: true,
+    );
   }
 }
 
@@ -38,7 +42,11 @@ class ThemeTestComponentsCtrl extends LdWidgetCtrl {
   bool isThemeSwitching = false;
 
   // CONSTRUCTOR ---------------------
-  ThemeTestComponentsCtrl({required super.pTag, required super.pViewCtrl});
+  ThemeTestComponentsCtrl({
+    required super.pTag,
+    required super.pViewCtrl,
+    required super.pFocusable,
+  });
 
   // 'LdWdiget' -----------------------
   @override

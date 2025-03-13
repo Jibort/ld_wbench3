@@ -22,7 +22,12 @@ abstract class LdWidget<C extends LdWidgetCtrl> extends GetWidget<C>
   late final C _ctrl;
 
   // CONSTRUCTOR ------------------
-  LdWidget({super.key, required LdViewCtrl pViewCtrl}) : _viewCtrl = pViewCtrl;
+  LdWidget({
+    super.key,
+    required LdViewCtrl pViewCtrl,
+    bool pEnabled = true,
+    bool pFocusable = false,
+  }) : _viewCtrl = pViewCtrl;
 
   // 📥 GETTERS/SETTERS ------------------
   LdViewCtrl get viewCtrl => _viewCtrl;

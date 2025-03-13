@@ -2,6 +2,7 @@
 // CreatedAt: 2025/03/07 dv.
 
 import 'dart:ui';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -30,8 +31,14 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
 
   // 🛠️ CONSTRUCTORS -------------------
   LdThemeCtrl() {
+    if (!enabled) {
+      _single = this;
+    }
+    enabled = true;
     tag = ctrlTag;
     typeName = className;
+    Get.put(this, tag: tag, permanent: true);
+    // LdThemeCtrl.single.init();
   } // : super(pTag: ctrlTag);
 
   void init() {
@@ -101,12 +108,35 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       // Específicament canviem l'estil del títol a blanc
       headlineLarge: TextStyle(
         color: Colors.white,
+        fontSize: 14.0.sp,
         fontWeight: FontWeight.bold,
       ),
       headlineMedium: TextStyle(
         color: Colors.white,
+        fontSize: 10.0.sp,
         fontWeight: FontWeight.bold,
       ),
+      headlineSmall: TextStyle(
+        color: Colors.white,
+        fontSize: 8.0.sp,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyLarge: TextStyle(
+        color: Colors.black,
+        fontSize: 12.0.sp,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyMedium: TextStyle(
+        color: Colors.black,
+        fontSize: 10.0.sp,
+        fontWeight: FontWeight.bold,
+      ),
+      bodySmall: TextStyle(
+        color: Colors.black,
+        fontSize: 8.0.sp,
+        fontWeight: FontWeight.bold,
+      ),
+
       // També afegim l'estil per a subtítols
       titleLarge: TextStyle(color: Colors.white),
     ),
@@ -119,11 +149,13 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+        padding: EdgeInsets.symmetric(horizontal: 2.0.w, vertical: 2.0.h),
         backgroundColor: primaryLight,
         foregroundColor: Colors.white,
         elevation: 6, // Més elevació en tema clar
         shadowColor: Colors.black.withAlpha((0.5 * 255.0).round()),
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
@@ -133,21 +165,77 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       foregroundColor: Colors.white,
     ),
 
+    // Per al tema clar
     inputDecorationTheme: InputDecorationTheme(
-      fillColor: Colors.white,
+      // Paddings i espaiats d'edició
+      contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
+
+      // Colors i estils base
+      fillColor: Colors.transparent, // Com els botons outlined, sense fons
       filled: true,
+
+      // Vores - Estil similar als botons outlined
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.grey.shade400),
+        borderSide: BorderSide(color: primaryLight, width: 1.2), // Vora normal
       ),
+
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.grey.shade400),
+        borderSide: BorderSide(color: primaryLight, width: 1.2), // Vora normal
       ),
+
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: primaryLight, width: 2),
+        borderSide: BorderSide(
+          color: primaryLight,
+          width: 2.5,
+        ), // Vora més gruixuda amb focus
       ),
+
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: errorLight,
+          width: 1.2,
+        ), // Vora normal amb error
+      ),
+
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: errorLight,
+          width: 2.5,
+        ), // Vora més gruixuda amb focus i error
+      ),
+
+      // Estils de text
+      isDense: true,
+      labelStyle: TextStyle(
+        fontSize: 16.0, // Mateixa mida que els botons
+        color: primaryLight,
+        fontWeight: FontWeight.normal,
+      ),
+      floatingLabelStyle: TextStyle(
+        fontSize: 20.0, // Mateixa mida que els botons
+        color: primaryLight,
+        fontWeight: FontWeight.bold,
+      ),
+
+      hintStyle: TextStyle(color: Colors.grey.shade500),
+      helperStyle: TextStyle(
+        fontFamily: 'Montserrat',
+        fontSize: 10.sp,
+        fontWeight: FontWeight.w400,
+        fontStyle: FontStyle.italic,
+        color: Colors.white30,
+        letterSpacing: 0.2,
+      ),
+      errorStyle: TextStyle(color: errorLight, fontSize: 12.0),
+
+      // Prefix i suffix - Mateixos colors que els botons outlined
+      prefixIconColor: primaryLight,
+      suffixIconColor: primaryLight,
     ),
 
     checkboxTheme: CheckboxThemeData(
@@ -174,6 +262,7 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
         fontSize: 20,
         fontWeight: FontWeight.bold,
       ),
+
       // Assegurem que tots els textos de l'AppBar siguin blancs
       toolbarTextStyle: TextStyle(color: Colors.white),
     ),
@@ -201,12 +290,35 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       // Específicament canviem l'estil del títol a blanc
       headlineLarge: TextStyle(
         color: Colors.white,
+        fontSize: 14.0.sp,
         fontWeight: FontWeight.bold,
       ),
       headlineMedium: TextStyle(
         color: Colors.white,
+        fontSize: 10.0.sp,
         fontWeight: FontWeight.bold,
       ),
+      headlineSmall: TextStyle(
+        color: Colors.white,
+        fontSize: 8.0.sp,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyLarge: TextStyle(
+        color: Colors.black,
+        fontSize: 12.0.sp,
+        fontWeight: FontWeight.bold,
+      ),
+      bodyMedium: TextStyle(
+        color: Colors.black,
+        fontSize: 10.0.sp,
+        fontWeight: FontWeight.bold,
+      ),
+      bodySmall: TextStyle(
+        color: Colors.black,
+        fontSize: 8.0.sp,
+        fontWeight: FontWeight.bold,
+      ),
+
       // També afegim l'estil per a subtítols
       titleLarge: TextStyle(color: Colors.white),
     ),
@@ -219,13 +331,13 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         backgroundColor: Color.fromARGB(255, 89, 124, 172),
         foregroundColor: Colors.white,
         elevation: 8, // Elevació encara més alta en tema fosc
-        shadowColor: Colors.black.withAlpha(
-          (0.7 * 255.0).round(),
-        ), // withOpacity(0.7), // Ombra més visible
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        shadowColor: Colors.black.withAlpha((0.7 * 255.0).round()),
+        padding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 6.0.h),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
@@ -236,20 +348,76 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
     ),
 
     inputDecorationTheme: InputDecorationTheme(
-      fillColor: Color(0xFF2C2C2C), // Un gris fosc per als inputs
+      // Paddings i espaiats d'edició
+      contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
+
+      // Colors i estils base
+      fillColor: Colors.transparent, // Com els botons outlined, sense fons
       filled: true,
+
+      // Vores - Estil similar als botons outlined
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.grey.shade700),
+        borderSide: BorderSide(
+          color: Colors.lightBlueAccent,
+          width: 1.2,
+        ), // Vora normal
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: Colors.grey.shade700),
+        borderSide: BorderSide(
+          color: Colors.lightBlueAccent,
+          width: 1.2,
+        ), // Vora normal
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: primaryDark, width: 2),
+        borderSide: BorderSide(
+          color: Colors.lightBlueAccent,
+          width: 2.5,
+        ), // Vora més gruixuda amb focus
       ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: errorDark,
+          width: 1.2,
+        ), // Vora normal amb error
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(
+          color: errorDark,
+          width: 2.5,
+        ), // Vora més gruixuda amb focus i error
+      ),
+
+      // Estils de text
+      isDense: true,
+      labelStyle: TextStyle(
+        fontSize: 16.0, // Mateixa mida que els botons
+        color: Colors.lightBlueAccent,
+        fontWeight: FontWeight.normal,
+      ),
+      floatingLabelStyle: TextStyle(
+        fontSize: 20.0, // Mateixa mida que els botons
+        color: Colors.lightBlueAccent,
+        fontWeight: FontWeight.bold,
+      ),
+      hintStyle: TextStyle(color: Colors.grey.shade400),
+      helperStyle: TextStyle(
+        fontFamily: 'Montserrat',
+        fontSize: 10.sp,
+        fontWeight: FontWeight.w400,
+        fontStyle: FontStyle.italic,
+        color: Colors.white70,
+        letterSpacing: 0.2,
+      ),
+      errorStyle: TextStyle(color: errorDark, fontSize: 12.0),
+
+      // Prefix i suffix - Mateixos colors que els botons outlined
+      prefixIconColor: Colors.lightBlueAccent,
+      suffixIconColor: Colors.lightBlueAccent,
     ),
 
     checkboxTheme: CheckboxThemeData(

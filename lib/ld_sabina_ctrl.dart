@@ -27,12 +27,18 @@ class LdSabinaCtrl extends LdAppCtrl {
 
   // CONSTRUCTOR ----------------------
   LdSabinaCtrl({LdThemeCtrl? pTheme}) {
-    themeMode = LdThemeCtrl.single.themeMode.obs;
+    // LdThemeCtrl();
+    // themeMode = LdThemeCtrl.single.themeMode.obs;
   }
 
   // 'LdAppCtrl' ----------------------
   @override
   Widget buildWidget(BuildContext pBCtx) {
+    LdThemeCtrl();
+    // LdThemeCtrl tCtrl = LdThemeCtrl();
+    // Get.put(tCtrl, tag: tCtrl.tag, permanent: true);
+    // LdThemeCtrl.single.init();
+
     return ScreenUtilInit(
       designSize: iPhone8PlusSize,
       minTextAdapt: true,
@@ -65,6 +71,40 @@ class LdSabinaCtrl extends LdAppCtrl {
             ),
           ),
     );
+    // return ScreenUtilInit(
+    //   designSize: iPhone8PlusSize,
+    //   minTextAdapt: true,
+    //   splitScreenMode: true,
+    //   builder: (_, child) {
+    //     themeMode = LdThemeCtrl.single.themeMode.obs;
+    //     return Obx(
+    //       () => GetMaterialApp(
+    //         debugShowCheckedModeBanner: false,
+    //         title: 'LdSabinaApp',
+    //         themeMode: themeMode.value,
+    //         theme: LdThemeCtrl.single.lightTheme,
+    //         darkTheme: LdThemeCtrl.single.darkTheme,
+    //         locale: Get.deviceLocale,
+    //         fallbackLocale: Locale('ca'),
+    //         translations: Tr.single,
+    //         supportedLocales: const [
+    //           Locale('ca'),
+    //           Locale('es'),
+    //           Locale('en'),
+    //           Locale('fr'),
+    //           Locale('pt'),
+    //         ],
+    //         localizationsDelegates: const [
+    //           GlobalMaterialLocalizations.delegate,
+    //           GlobalWidgetsLocalizations.delegate,
+    //           GlobalCupertinoLocalizations.delegate,
+    //         ],
+    //         initialRoute: AppRoutes.initialRoute,
+    //         getPages: AppRoutes.pages,
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   // 🧩 MÈTODES ------------------------

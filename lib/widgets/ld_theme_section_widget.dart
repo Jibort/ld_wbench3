@@ -53,6 +53,7 @@ class LdThemeSectionWidgetCtrl extends LdWidgetCtrl {
   LdThemeSectionWidgetCtrl({
     required super.pTag,
     required super.pViewCtrl,
+    super.pFocusable = true,
     required this.title,
     required this.child,
     this.padding,

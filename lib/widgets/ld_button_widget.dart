@@ -24,6 +24,8 @@ class LdButtonWidget extends LdWidget<LdButtonWidgetCtrl> {
     super.key,
     required LdViewCtrl viewCtrl,
     String? pTag,
+    bool pEnabled = true,
+    bool pFocusable = false,
     required String text,
     Widget? icon,
     void Function()? onPressed,
@@ -35,12 +37,15 @@ class LdButtonWidget extends LdWidget<LdButtonWidgetCtrl> {
     double? borderRadius,
     EdgeInsetsGeometry? padding,
     bool isLoading = false,
-  }) : super(pViewCtrl: viewCtrl) {
+  }) : super(pViewCtrl: viewCtrl, pEnabled: pEnabled, pFocusable: pFocusable) {
     tag = pTag ?? "${widgetTag}_${DateTime.now().millisecondsSinceEpoch}";
     typeName = className;
+
     ctrl = LdButtonWidgetCtrl(
       pTag: tag,
       pViewCtrl: viewCtrl,
+      pEnabled: pEnabled,
+      pFocusable: pFocusable,
       onPressed: onPressed,
       text: text,
       type: type ?? LdButtonType.elevated,
@@ -51,6 +56,11 @@ class LdButtonWidget extends LdWidget<LdButtonWidgetCtrl> {
       height: height,
       borderRadius: borderRadius,
       padding: padding,
+    );
+    withHorizontalAnimation(
+      animationColor: Colors.blue.withAlpha((0.3 * 255.0).round()),
+      animationDuration: Duration(milliseconds: 400),
+      btnCtrl: ctrl,
     );
   }
 
@@ -102,6 +112,10 @@ class LdButtonWidgetCtrl extends LdWidgetCtrl {
   static const className = "LdButtonWidgetCtrl";
 
   // 🧩 MEMBRES ------------------------
+  // late AnimationController _animCtrl;
+  // late Animation<double> _anim;
+  // final Offset _tapPosition = Offset.zero;
+
   final String text;
   final Widget? icon;
   final VoidCallback? onPressed;
@@ -118,6 +132,8 @@ class LdButtonWidgetCtrl extends LdWidgetCtrl {
   LdButtonWidgetCtrl({
     required super.pTag,
     required super.pViewCtrl,
+    super.pEnabled = true,
+    super.pFocusable = false,
     required this.text,
     this.icon,
     this.onPressed,
@@ -133,6 +149,11 @@ class LdButtonWidgetCtrl extends LdWidgetCtrl {
     padding ??= EdgeInsets.all(15.0.h);
     borderRadius ??= _borderRadius;
     height ??= _height;
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
   }
 
   // 'LdWdiget' -----------------------
@@ -297,38 +318,221 @@ class LdButtonWidgetCtrl extends LdWidgetCtrl {
         // Crear el botó segons el tipus
         switch (type) {
           case LdButtonType.elevated:
-            return SizedBox(
-              width: width,
-              height: height ?? 40.0.h,
-              child: ElevatedButton(
-                onPressed: isLoading ? null : onPressed,
-                style: buttonStyle,
-                child: childWidget,
+            return FocusScope(
+              canRequestFocus: false,
+              child: SizedBox(
+                width: width,
+                height: height,
+                child: ElevatedButton(
+                  onPressed: isLoading ? null : onPressed,
+                  style: buttonStyle,
+                  child: childWidget,
+                ),
               ),
             );
           case LdButtonType.outlined:
-            return SizedBox(
-              width: width,
-              height: height ?? 40.0.h,
-              child: OutlinedButton(
-                onPressed: isLoading ? null : onPressed,
-                style: buttonStyle,
-                child: childWidget,
+            return FocusScope(
+              canRequestFocus: false,
+              child: SizedBox(
+                width: width,
+                height: height,
+                child: OutlinedButton(
+                  focusNode:
+                      (isFocusable) ? null : FocusNode(canRequestFocus: false),
+                  onPressed: isLoading ? null : onPressed,
+                  style: buttonStyle,
+                  child: childWidget,
+                ),
               ),
             );
           case LdButtonType.text:
-            return SizedBox(
-              width: width,
-              height: height ?? 40.0.h,
-              child: TextButton(
-                onPressed: isLoading ? null : onPressed,
-                style: buttonStyle,
-                child: childWidget,
+            return FocusScope(
+              canRequestFocus: false,
+              child: SizedBox(
+                width: width,
+                height: height,
+                child: TextButton(
+                  focusNode:
+                      (isFocusable) ? null : FocusNode(canRequestFocus: false),
+                  onPressed: isLoading ? null : onPressed,
+                  style: buttonStyle,
+                  child: childWidget,
+                ),
               ),
             );
         }
       },
     );
     // return _getBuilder!;
+  }
+}
+
+/// Extensió per afegir animació horitzontal a LdButtonWidget
+extension LdButtonAnimationExtension on LdButtonWidget {
+  Widget withHorizontalAnimation({
+    Color animationColor = Colors.white30,
+    Duration animationDuration = const Duration(milliseconds: 500),
+    required LdButtonWidgetCtrl btnCtrl,
+  }) {
+    return _LdButtonAnimationWrapper(
+      button: this,
+      animationColor: animationColor,
+      animationDuration: animationDuration,
+      btnCtrl: btnCtrl,
+    );
+  }
+}
+
+/// Widget d'embolcall per afegir l'animació
+class _LdButtonAnimationWrapper extends StatefulWidget {
+  final LdButtonWidget button;
+  final Color animationColor;
+  final Duration animationDuration;
+  final LdButtonWidgetCtrl btnCtrl;
+
+  const _LdButtonAnimationWrapper({
+    required this.button,
+    required this.animationColor,
+    required this.animationDuration,
+    required this.btnCtrl,
+  });
+
+  @override
+  State<_LdButtonAnimationWrapper> createState() =>
+      _LdButtonAnimationWrapperState(btnCtrl);
+}
+
+class _LdButtonAnimationWrapperState extends State<_LdButtonAnimationWrapper>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  Offset _tapPosition = Offset.zero;
+  bool _isAnimating = false;
+  LdButtonWidgetCtrl btnCtrl;
+  _LdButtonAnimationWrapperState(this.btnCtrl);
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.animationDuration,
+    );
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        setState(() {
+          _isAnimating = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _startAnimation(TapDownDetails details) {
+    setState(() {
+      _tapPosition = details.localPosition;
+      _isAnimating = true;
+    });
+    _controller.forward(from: 0.0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Mantenim l'onPressed original
+    final originalOnPressed = btnCtrl.onPressed;
+
+    return Material(
+      color: Colors.transparent,
+      child: Stack(
+        children: [
+          // Boto original amb gestor de clics personalitzat
+          GestureDetector(
+            onTapDown: _startAnimation,
+            // Passem els clics al botó original
+            onTap: originalOnPressed,
+            child: widget.button,
+          ),
+
+          // Capa d'animació només visible durant l'animació
+          if (_isAnimating)
+            Positioned.fill(
+              child: IgnorePointer(
+                child: AnimatedBuilder(
+                  animation: _animation,
+                  builder: (context, child) {
+                    return CustomPaint(
+                      painter: _HorizontalRipplePainter(
+                        color: widget.animationColor,
+                        progress: _animation.value,
+                        tapPosition: _tapPosition,
+                      ),
+                      size: Size.infinite,
+                    );
+                  },
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+/// CustomPainter per dibuixar l'animació d'ona horitzontal
+class _HorizontalRipplePainter extends CustomPainter {
+  final Color color;
+  final double progress;
+  final Offset tapPosition;
+
+  _HorizontalRipplePainter({
+    required this.color,
+    required this.progress,
+    required this.tapPosition,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final Paint paint =
+        Paint()
+          ..color = color.withAlpha((255 * (1.0 - progress)).round())
+          ..style = PaintingStyle.fill;
+
+    // Calculem les amplades d'expansió
+    final double leftWidth = tapPosition.dx * progress;
+    final double rightWidth = (size.width - tapPosition.dx) * progress;
+
+    // Rectangle esquerre
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(tapPosition.dx - leftWidth, 0, leftWidth, size.height),
+        Radius.circular(4.0),
+      ),
+      paint,
+    );
+
+    // Rectangle dret
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(tapPosition.dx, 0, rightWidth, size.height),
+        Radius.circular(4.0),
+      ),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_HorizontalRipplePainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+        oldDelegate.color != color ||
+        oldDelegate.tapPosition != tapPosition;
   }
 }
