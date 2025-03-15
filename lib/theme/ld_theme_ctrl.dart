@@ -151,11 +151,24 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       style: ElevatedButton.styleFrom(
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-        padding: EdgeInsets.symmetric(horizontal: 2.0.w, vertical: 2.0.h),
+        padding: EdgeInsets.symmetric(horizontal: 2.0.w, vertical: 0.0.h),
         backgroundColor: primaryLight,
         foregroundColor: Colors.white,
-        elevation: 6, // Més elevació en tema clar
-        shadowColor: Colors.black.withAlpha((0.5 * 255.0).round()),
+        elevation: 6, // Més elevació en tema clar (6)
+        shadowColor: Colors.black.withAlpha((0.9 * 255.0).round()),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    ),
+
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+        padding: EdgeInsets.symmetric(horizontal: 0.0.w, vertical: 0.0.h),
+        backgroundColor: primaryLight,
+        foregroundColor: Colors.black,
+        elevation: 6, // Més elevació en tema clar (6)
+        shadowColor: Colors.black.withAlpha((0.9 * 255.0).round()),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
@@ -212,12 +225,12 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       // Estils de text
       isDense: true,
       labelStyle: TextStyle(
-        fontSize: 16.0, // Mateixa mida que els botons
+        fontSize: 16.0.sp, // Mateixa mida que els botons
         color: primaryLight,
         fontWeight: FontWeight.normal,
       ),
       floatingLabelStyle: TextStyle(
-        fontSize: 20.0, // Mateixa mida que els botons
+        // fontSize: _txtScaler.scale(10.0.sp), // Igual que els botons
         color: primaryLight,
         fontWeight: FontWeight.bold,
       ),
@@ -225,7 +238,7 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       hintStyle: TextStyle(color: Colors.grey.shade500),
       helperStyle: TextStyle(
         fontFamily: 'Montserrat',
-        fontSize: 10.sp,
+        fontSize: 10.0.sp,
         fontWeight: FontWeight.w400,
         fontStyle: FontStyle.italic,
         color: Colors.white30,
@@ -259,7 +272,7 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       elevation: 4,
       titleTextStyle: TextStyle(
         color: Colors.white,
-        fontSize: 20,
+        fontSize: 20.0.h,
         fontWeight: FontWeight.bold,
       ),
 
@@ -331,13 +344,25 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
 
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+        padding: EdgeInsets.symmetric(horizontal: 2.0.w, vertical: 0.0.h),
         backgroundColor: Color.fromARGB(255, 89, 124, 172),
         foregroundColor: Colors.white,
         elevation: 8, // Elevació encara més alta en tema fosc
         shadowColor: Colors.black.withAlpha((0.7 * 255.0).round()),
-        padding: EdgeInsets.symmetric(horizontal: 8.0.w, vertical: 6.0.h),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+        padding: EdgeInsets.symmetric(horizontal: 0.0.w, vertical: 0.0.h),
+        backgroundColor: primaryLight,
+        foregroundColor: Colors.white,
+        elevation: 6, // Més elevació en tema clar
+        shadowColor: Colors.black.withAlpha((0.5 * 255.0).round()),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
     ),
@@ -349,8 +374,8 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
 
     inputDecorationTheme: InputDecorationTheme(
       // Paddings i espaiats d'edició
-      contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
-
+      // contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 4.w),
+      contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
       // Colors i estils base
       fillColor: Colors.transparent, // Com els botons outlined, sense fons
       filled: true,
@@ -395,15 +420,16 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       // Estils de text
       isDense: true,
       labelStyle: TextStyle(
-        fontSize: 16.0, // Mateixa mida que els botons
+        fontSize: 16.0.sp, // Mateixa mida que els botons
         color: Colors.lightBlueAccent,
         fontWeight: FontWeight.normal,
       ),
       floatingLabelStyle: TextStyle(
-        fontSize: 20.0, // Mateixa mida que els botons
+        fontSize: 20.0.sp, // Mateixa mida que els botons
         color: Colors.lightBlueAccent,
         fontWeight: FontWeight.bold,
       ),
+
       hintStyle: TextStyle(color: Colors.grey.shade400),
       helperStyle: TextStyle(
         fontFamily: 'Montserrat',
@@ -441,7 +467,7 @@ class LdThemeCtrl extends GetxController with LdIdMixin {
       elevation: 4,
       titleTextStyle: TextStyle(
         color: Colors.white,
-        fontSize: 20,
+        fontSize: 20.0.sp,
         fontWeight: FontWeight.bold, // Títol en negreta
       ),
       toolbarTextStyle: TextStyle(color: Colors.white),

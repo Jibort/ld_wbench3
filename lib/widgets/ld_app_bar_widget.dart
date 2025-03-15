@@ -7,11 +7,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ld_wbench3/core/ld_view.dart';
 import 'package:ld_wbench3/core/ld_widget.dart';
 import 'package:ld_wbench3/tools/null_mang.dart';
+import 'package:ld_wbench3/widgets/separators.dart';
 import 'package:ld_wbench3/widgets/widget_key.dart';
 import 'package:ld_wbench3/theme/text_styles.dart';
 import 'package:ld_wbench3/trans/tr.dart';
 import 'package:ld_wbench3/tools/consts/ui.dart';
 import 'package:ld_wbench3/core/ld_state.dart';
+
+TextScaler _txtScaler = MediaQuery.of(Get.context!).textScaler;
 
 // WIDGET 'LdAppBarWidget' ============
 class LdAppBarWidget extends LdWidget<LdAppBarWidgetCtrl>
@@ -77,7 +80,9 @@ class LdAppBarWidget extends LdWidget<LdAppBarWidgetCtrl>
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight + 4.0.h);
+  Size get preferredSize {
+    return Size.fromHeight(kToolbarHeight + _txtScaler.scale(10.0.sp));
+  }
 }
 
 // CTRL 'LdAppBarWidgetCtrl' ==============
@@ -202,15 +207,12 @@ class LdAppBarWidgetCtrl extends LdWidgetCtrl {
               if (subtitle != null)
                 Text(
                   subtitle!,
-                  style: TextStyle(
-                    color:
-                        viewCtrl.state.isError
-                            ? Colors.red
-                            : txsAppBarSubtitleStyle().color,
-                    fontSize: txsAppBarSubtitleStyle().fontSize,
-                    fontWeight: txsAppBarSubtitleStyle().fontWeight,
-                    fontStyle: txsAppBarSubtitleStyle().fontStyle,
-                    fontFamily: txsAppBarSubtitleStyle().fontFamily,
+                  style: txsAppBarSubtitleStyle(
+                    pFgColor: viewCtrl.state.isError ? Colors.red : null,
+                  ),
+                  textHeightBehavior: TextHeightBehavior(
+                    applyHeightToFirstAscent: true,
+                    applyHeightToLastDescent: true,
                   ),
                 ),
             ],
@@ -248,6 +250,7 @@ class LdAppBarWidgetCtrl extends LdWidgetCtrl {
         }
 
         return AppBar(
+          titleSpacing: 15.0.h,
           automaticallyImplyLeading: true,
           leading: buildLeadingIcon(pBCtx),
           backgroundColor:
@@ -259,7 +262,7 @@ class LdAppBarWidgetCtrl extends LdWidgetCtrl {
               (showProgress)
                   ? buildProgressContent(pBCtx)
                   : buildNormalContent(pBCtx),
-          actions: spacedActions,
+          actions: [...?spacedActions],
           bottom:
               showProgress && isNotNull(progress)
                   ? PreferredSize(

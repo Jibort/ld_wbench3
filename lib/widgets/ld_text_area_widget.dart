@@ -1,6 +1,7 @@
 // Widget per a l'edició de text multilinea.
 // CreatedAt: 2025/03/13 dj.
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:ld_wbench3/core/ld_view.dart';
 import 'package:ld_wbench3/core/ld_widget.dart';
 import 'package:ld_wbench3/theme/text_styles.dart';
+
+final TextScaler _txtScaler = MediaQuery.of(Get.context!).textScaler;
 
 // WIDGET 'LdTextAreaWidget' ==========
 class LdTextAreaWidget extends LdWidget<LdTextAreaWidgetCtrl> {
@@ -284,11 +287,14 @@ class LdTextAreaWidgetCtrl extends LdWidgetCtrl {
       focusedErrorBorder: theme.inputDecorationTheme.focusedErrorBorder,
 
       // Aplicar estils de text consistents amb els botons
-      labelStyle: theme.inputDecorationTheme.labelStyle?.copyWith(
-        color: primaryColor,
-      ),
+      labelStyle: txsInputLabelStyle(pFgColor: primaryColor),
+
       floatingLabelStyle: theme.inputDecorationTheme.floatingLabelStyle
-          ?.copyWith(color: primaryColor),
+          ?.copyWith(
+            fontSize: _txtScaler.scale(12.0.sp),
+            color: primaryColor,
+            fontWeight: isFocused.value ? FontWeight.bold : FontWeight.normal,
+          ),
       hintStyle: theme.inputDecorationTheme.hintStyle,
       errorStyle: theme.inputDecorationTheme.errorStyle,
       helperStyle: txsInputHelperStyle(
@@ -298,8 +304,11 @@ class LdTextAreaWidgetCtrl extends LdWidgetCtrl {
                 : Colors.grey.shade600,
       ),
 
-      contentPadding:
-          contentPadding ?? theme.inputDecorationTheme.contentPadding,
+      contentPadding: EdgeInsets.symmetric(
+        vertical: 15.0.h,
+        horizontal: 10.0.w,
+      ),
+      // contentPadding ?? theme.inputDecorationTheme.contentPadding,
       counterText: showCounter ? null : '',
     );
 

@@ -26,6 +26,9 @@ class EmptyViewCtrl extends LdViewCtrl<EmptyViewCtrl, EmptyViewState> {
   LdActionButtonWidget? btnToggle, btnDummy;
   LdButtonWidget? btnExpand;
   LdEditWidget? edtName;
+  LdEditWidget? edtEMail;
+  LdEditWidget? edtPassword;
+  LdTextAreaWidget? edtTextArea;
 
   // 🛠️ CONSTRUCTORS ------------------
   EmptyViewCtrl({required super.pTag, required super.pViewState}) {
@@ -45,8 +48,12 @@ class EmptyViewCtrl extends LdViewCtrl<EmptyViewCtrl, EmptyViewState> {
   // Botons d'acció ------------------
   void toggleTheme() {
     btnToggle!.isEnabled = !btnToggle!.isEnabled;
+    btnToggle!.update();
     btnDummy!.isEnabled = !btnDummy!.isEnabled;
+    btnDummy!.update();
     LdThemeCtrl.single.toggleTheme();
+    btnToggle!.iconData =
+        (LdThemeCtrl.single.isDarkMode) ? Icons.light_mode : Icons.dark_mode;
     LdThemeCtrl.single.notify(
       pTgts: [
         scaffoldIdx,
@@ -54,7 +61,6 @@ class EmptyViewCtrl extends LdViewCtrl<EmptyViewCtrl, EmptyViewState> {
         appBarIdx,
         btnToggleIdx,
         btnDummyIdx,
-        // "btnExpand",
       ],
     );
   }
@@ -74,7 +80,7 @@ class EmptyViewCtrl extends LdViewCtrl<EmptyViewCtrl, EmptyViewState> {
           pViewCtrl: this,
           pViewState: state,
           onPressed: toggleTheme,
-          icon:
+          iconData:
               LdThemeCtrl.single.isDarkMode
                   ? Icons.light_mode
                   : Icons.dark_mode,
@@ -86,7 +92,7 @@ class EmptyViewCtrl extends LdViewCtrl<EmptyViewCtrl, EmptyViewState> {
           pViewCtrl: this,
           pViewState: state,
           onPressed: toggleTheme,
-          icon: Icons.data_exploration,
+          iconData: Icons.data_exploration,
         ),
       ],
       body: SingleChildScrollView(
@@ -122,7 +128,7 @@ class EmptyViewCtrl extends LdViewCtrl<EmptyViewCtrl, EmptyViewState> {
               prefixIcon: Icons.person,
             ),
             VertSep(16.0),
-            LdEditWidget(
+            edtEMail = LdEditWidget(
               viewCtrl: this,
               label: 'Correu electrònic',
               placeholder: 'exemple@correu.com',
@@ -130,7 +136,7 @@ class EmptyViewCtrl extends LdViewCtrl<EmptyViewCtrl, EmptyViewState> {
               prefixIcon: Icons.email,
             ),
             VertSep(16.0),
-            LdEditWidget(
+            edtPassword = LdEditWidget(
               viewCtrl: this,
               label: 'Contrasenya',
               placeholder: '********',
@@ -138,7 +144,7 @@ class EmptyViewCtrl extends LdViewCtrl<EmptyViewCtrl, EmptyViewState> {
               prefixIcon: Icons.lock,
             ),
             VertSep(16.0),
-            LdTextAreaWidget(
+            edtTextArea = LdTextAreaWidget(
               viewCtrl: this,
               label: 'Descripció',
               placeholder: 'Escriu una descripció detallada...',

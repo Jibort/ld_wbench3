@@ -2,6 +2,8 @@
 // Created: 2025/03/13 dv. JIQ
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:ld_wbench3/core/ld_view_state.dart';
 import 'package:ld_wbench3/core/ld_widget.dart';
 
@@ -15,7 +17,7 @@ class LdActionButtonWidget extends LdWidget<LdActionButtonWidgetCtrl> {
     required String pTag,
     String label = "",
     required VoidCallback onPressed,
-    IconData? icon,
+    IconData? iconData,
     Color? iconColor,
     Color? backgroundColor,
     bool enabled = true,
@@ -25,7 +27,7 @@ class LdActionButtonWidget extends LdWidget<LdActionButtonWidgetCtrl> {
     required super.pViewCtrl,
     required LdViewState pViewState,
   }) : super(pEnabled: enabled, pFocusable: focusable) {
-    tag = pTag; // "${pTag}_widget";
+    tag = pTag;
     typeName = className;
 
     ctrl = LdActionButtonWidgetCtrl(
@@ -33,7 +35,7 @@ class LdActionButtonWidget extends LdWidget<LdActionButtonWidgetCtrl> {
       pViewCtrl: viewCtrl,
       label: label,
       onPressed: onPressed,
-      icon: icon,
+      pIconData: iconData,
       iconColor: iconColor,
       backgroundColor: backgroundColor,
       pEnabled: enabled,
@@ -46,6 +48,8 @@ class LdActionButtonWidget extends LdWidget<LdActionButtonWidgetCtrl> {
   // METHODS --------------------------
   bool get isEnabled => ctrl.isEnabled;
   bool get isFocusable => ctrl.isFocusable;
+  IconData? get iconData => ctrl.iconData;
+  set iconData(IconData? value) => ctrl.iconData = value;
 
   void update([List<String>? tags]) {
     ctrl.update(tags);
@@ -63,7 +67,7 @@ class LdActionButtonWidgetCtrl extends LdWidgetCtrl {
   // 🧩 MEMBRES --------------------------
   final String label;
   final VoidCallback onPressed;
-  final IconData? icon;
+  Rx<IconData?> icon = Rx<IconData?>(null);
   final Color? iconColor;
   final Color? backgroundColor;
   final double? iconSize;
@@ -75,14 +79,22 @@ class LdActionButtonWidgetCtrl extends LdWidgetCtrl {
     required super.pViewCtrl,
     required this.label,
     required this.onPressed,
-    this.icon,
+    IconData? pIconData,
     this.iconColor,
     this.backgroundColor,
     super.pEnabled,
     super.pFocusable = false,
     this.iconSize,
     this.padding,
-  });
+  }) {
+    icon.value = pIconData;
+  }
+
+  // GETTERS/SETERS -------------------
+  IconData? get iconData => icon.value;
+  set iconData(IconData? pIconData) {
+    icon.value = pIconData;
+  }
 
   // PUBLIC METHODS -------------------
   void trigger() {
@@ -142,81 +154,37 @@ class LdActionButtonWidgetCtrl extends LdWidgetCtrl {
     final Color defaultBgColor = backgroundColor ?? Colors.transparent;
 
     // Si tenim una icona, utilitzem un IconButton estilitzat
-    if (icon != null) {
-      return Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(4.0),
-        clipBehavior: Clip.antiAlias,
-        child: Container(
-          decoration: BoxDecoration(
-            color: isEnabled ? defaultBgColor : Colors.transparent,
-            borderRadius: BorderRadius.circular(4.0),
-            border: Border.all(
-              color:
-                  isEnabled
-                      ? defaultIconColor.withAlpha(80) // Més visible
-                      : Colors.grey.withAlpha(60),
-              width: 1.5, // Una mica més gruixuda
-            ),
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(4.0),
+      clipBehavior: Clip.antiAlias,
+      child: Container(
+        decoration: BoxDecoration(
+          color: isEnabled ? defaultBgColor : Colors.transparent,
+          borderRadius: BorderRadius.circular(4.0),
+          border: Border.all(
+            color:
+                isEnabled
+                    ? defaultIconColor.withAlpha(80) // Més visible
+                    : Colors.grey.withAlpha(60),
+            width: 1.5, // Una mica més gruixuda
           ),
-          child: InkWell(
-            onTap: isEnabled ? onPressed : null,
-            canRequestFocus: isFocusable,
-            splashColor: defaultIconColor.withAlpha(30),
-            highlightColor: defaultIconColor.withAlpha(20),
-            child: Padding(
-              padding: padding ?? const EdgeInsets.all(4.0), // Menys marge
-              child: Icon(
-                icon,
-                color: isEnabled ? defaultIconColor : Colors.grey,
-                size: iconSize ?? 24.0,
-              ),
+        ),
+        child: InkWell(
+          onTap: isEnabled ? onPressed : null,
+          canRequestFocus: isFocusable,
+          splashColor: defaultIconColor.withAlpha(30),
+          highlightColor: defaultIconColor.withAlpha(20),
+          child: Padding(
+            padding: padding ?? const EdgeInsets.all(4.0), // Menys marge
+            child: Icon(
+              icon.value ?? Icons.question_mark,
+              color: isEnabled ? defaultIconColor : Colors.grey,
+              size: iconSize ?? 20.0.h,
             ),
           ),
         ),
-      );
-    }
-    // Si no, farem servir un TextButton estilitzat per a AppBar
-    else {
-      return Material(
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(4.0),
-        clipBehavior:
-            Clip.antiAlias, // Assegura que l'efecte splash respecta la forma
-        child: Container(
-          decoration: BoxDecoration(
-            color: isEnabled ? defaultBgColor : Colors.transparent,
-            borderRadius: BorderRadius.circular(4.0),
-            border: Border.all(
-              color:
-                  isEnabled
-                      ? defaultIconColor.withAlpha(80) // Més visible
-                      : Colors.grey.withAlpha(60),
-              width: 1.5, // Una mica més gruixuda
-            ),
-          ),
-          child: InkWell(
-            onTap: isEnabled ? onPressed : null,
-            canRequestFocus: isFocusable,
-            splashColor: defaultIconColor.withAlpha(30),
-            highlightColor: defaultIconColor.withAlpha(20),
-            child: Padding(
-              padding:
-                  padding ??
-                  const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 6.0,
-                  ), // Menys marge
-              child: Text(
-                label,
-                style: TextStyle(
-                  color: isEnabled ? defaultIconColor : Colors.grey,
-                ),
-              ),
-            ),
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
 }

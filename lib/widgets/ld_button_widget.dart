@@ -6,12 +6,16 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ld_wbench3/core/ld_view.dart';
 import 'package:ld_wbench3/core/ld_widget.dart';
+import 'package:ld_wbench3/theme/text_styles.dart';
+import 'package:ld_wbench3/widgets/separators.dart';
 
 final _borderRadius = 10.0.r;
-final _height = 45.0.h;
+final _height = 32.0.h;
 
 // Enumeració per als tipus de botons suportats
 enum LdButtonType { elevated, outlined, text }
+
+final TextScaler _txtScaler = MediaQuery.of(Get.context!).textScaler;
 
 // WIDGET 'LdButtonWidget' =============
 class LdButtonWidget extends LdWidget<LdButtonWidgetCtrl> {
@@ -176,7 +180,12 @@ class LdButtonWidgetCtrl extends LdWidgetCtrl {
         fgColor = foregroundColor ?? theme.colorScheme.onPrimary;
         break;
       case LdButtonType.outlined:
-        bgColor = Colors.transparent;
+        bgColor =
+            backgroundColor ??
+            (brightness == Brightness.dark
+                ? Colors.transparent
+                : theme.colorScheme.onPrimary);
+        // theme.colorScheme.onPrimary; // Colors.transparent;
         fgColor =
             foregroundColor ??
             (brightness == Brightness.dark
@@ -208,6 +217,7 @@ class LdButtonWidgetCtrl extends LdWidgetCtrl {
         );
       case LdButtonType.outlined:
         return OutlinedButton.styleFrom(
+          backgroundColor: bgColor,
           foregroundColor: fgColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius!),
@@ -223,6 +233,7 @@ class LdButtonWidgetCtrl extends LdWidgetCtrl {
         );
       case LdButtonType.text:
         return TextButton.styleFrom(
+          backgroundColor: bgColor,
           foregroundColor: fgColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius!),
@@ -259,16 +270,20 @@ class LdButtonWidgetCtrl extends LdWidgetCtrl {
           color:
               originalIcon.color ??
               iconColor, // Prioritzem el color específic si existeix
-          size: originalIcon.size ?? 20.0.sp,
+          size: _txtScaler.scale(originalIcon.size ?? 24.0.sp),
         );
       }
       return Row(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [iconWidget, SizedBox(width: 8.0.w), Text(text)],
+        children: [
+          iconWidget,
+          HortSep(4.0),
+          Text(text, style: txsInputTextStyle()),
+        ],
       );
     } else {
-      return Text(text);
+      return Text(text, style: txsInputTextStyle());
     }
   }
 

@@ -1,6 +1,7 @@
 // Widget per a l'edició de text d'una línia.
 // CreatedAt: 2025/03/13 dj.
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,8 @@ import 'package:ld_wbench3/theme/text_styles.dart';
 
 // Tipus predefinits per a LdEditWidget
 enum LdEditType { text, email, password, number, phone, search, url }
+
+final TextScaler _txtScaler = MediaQuery.of(Get.context!).textScaler;
 
 // WIDGET 'LdEditWidget' ==============
 class LdEditWidget extends LdWidget<LdEditWidgetCtrl> {
@@ -329,11 +332,14 @@ class LdEditWidgetCtrl extends LdWidgetCtrl {
       focusedErrorBorder: theme.inputDecorationTheme.focusedErrorBorder,
 
       // Aplicar estils de text consistents amb els botons
-      labelStyle: theme.inputDecorationTheme.labelStyle?.copyWith(
-        color: primaryColor,
-      ),
+      labelStyle: txsInputLabelStyle(pFgColor: primaryColor),
+
       floatingLabelStyle: theme.inputDecorationTheme.floatingLabelStyle
-          ?.copyWith(color: primaryColor),
+          ?.copyWith(
+            fontSize: _txtScaler.scale(12.0.sp),
+            color: primaryColor,
+            fontWeight: isFocused.value ? FontWeight.bold : FontWeight.normal,
+          ),
       hintStyle: theme.inputDecorationTheme.hintStyle,
       errorStyle: theme.inputDecorationTheme.errorStyle,
       helperStyle: txsInputHelperStyle(
