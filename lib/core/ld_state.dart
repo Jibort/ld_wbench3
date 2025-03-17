@@ -231,7 +231,7 @@ abstract class LdState {
 
   // FUNCIONS ABSTRACTES ---------------------
   // Carrega les dades de l'estat del widget o de la vista.
-  void loadData();
+  Future<void> loadData();
 
   // Només cert quan l'estat encara no ha carregat cap dada.
   bool get isNew;

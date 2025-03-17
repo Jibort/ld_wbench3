@@ -22,7 +22,7 @@ class ThemeTestViewState
 
   // 'LdState'
   @override
-  void loadData() {
+  Future<void> loadData() {
     // Exemple de càrrega de dades fictícia
     setPreparing();
 
@@ -44,5 +44,7 @@ class ThemeTestViewState
     setLoading();
     runSteps(ctrl);
     setLoaded(null);
+
+    return Future.value(null);
   }
 }

@@ -13,7 +13,7 @@ class EmptyViewState extends LdViewState<EmptyViewState, EmptyViewCtrl> {
 
   // 'LdViewState' --------------------
   @override
-  void loadData() {
-    // TODO: implement loadData
+  Future<void> loadData() {
+    return Future.value(null);
   }
 }

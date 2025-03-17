@@ -30,13 +30,13 @@ class WorldTimeViewCtrl
   RxBool isLoading = false.obs;
 
   // Llista de zones horàries que mostrarem
-  final List<String> capitalTimezones = [
-    'Europe/London', // Londres
-    'Europe/Paris', // París
-    'America/New_York', // Nova York
-    'Asia/Tokyo', // Tòquio
-    'Australia/Sydney', // Sydney
-  ];
+  // final List<String> capitalTimezones = [
+  //   'Europe/London', // Londres
+  //   'Europe/Paris', // París
+  //   'America/New_York', // Nova York
+  //   'Asia/Tokyo', // Tòquio
+  //   'Australia/Sydney', // Sydney
+  // ];
 
   // 🛠️ CONSTRUCTORS ------------------
   WorldTimeViewCtrl({required super.pTag, required super.pViewState}) {
@@ -79,13 +79,13 @@ class WorldTimeViewCtrl
 
       state.setLoading();
 
-      // Obtenir les hores de les capitals
-      final times = await _networkService.getTimeForMultipleZones(
-        capitalTimezones,
-      );
+      // // Obtenir les hores de les capitals
+      // final times = await _networkService.getTimeForMultipleZones(
+      //   capitalTimezones,
+      // );
 
       // Actualitzar l'estat
-      worldTimeViewState.worldTimes.value = times;
+      // worldTimeViewState.worldTimes.value = times;
       worldTimeViewState.lastUpdated.value = DateTime.now();
 
       state.setLoaded(null);
@@ -102,8 +102,8 @@ class WorldTimeViewCtrl
   }
 
   /// Actualitza les dades d'hora mundial
-  void refreshWorldTimes() async {
-    await loadWorldTimes();
+  Future<void> refreshWorldTimes() async {
+    await state.loadData();
     notify();
   }
 
@@ -112,7 +112,8 @@ class WorldTimeViewCtrl
   Widget buildView(BuildContext pBCtx) {
     // Carregar les dades si és la primera vegada
     if (worldTimeViewState.worldTimes.isEmpty) {
-      loadWorldTimes();
+      // JIQ: loadWorldTimes();
+      state.loadData();
     }
 
     return LdScaffoldWidget(
@@ -251,7 +252,7 @@ class WorldTimeViewCtrl
   }
 
   // Construeix una targeta per cada hora mundial
-  Widget _buildTimeCard(BuildContext context, WorldTime time) {
+  Widget _buildTimeCard(BuildContext context, WorldTime? time) {
     final theme = Theme.of(context);
 
     return LdCardWidget(
@@ -268,7 +269,9 @@ class WorldTimeViewCtrl
               children: [
                 Expanded(
                   child: Text(
-                    time.displayName,
+                    (time != null)
+                        ? time.displayName
+                        : 'No hi ha hora disponible',
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
@@ -278,11 +281,13 @@ class WorldTimeViewCtrl
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primary.withOpacity(0.2),
+                    color: theme.colorScheme.primary.withAlpha(
+                      (0.2 * 256.0).toInt(),
+                    ),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Text(
-                    time.abbreviation,
+                    (time != null) ? time.abbreviation : "ABBR?",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: theme.colorScheme.primary,
@@ -301,7 +306,9 @@ class WorldTimeViewCtrl
                 Icon(Icons.access_time, size: 24.h),
                 HortSep(8.0),
                 Text(
-                  time.formattedTime,
+                  (time != null)
+                      ? time.formattedTime
+                      : "No hi ha hora disponible",
                   style: TextStyle(
                     fontSize: 24.sp,
                     fontWeight: FontWeight.bold,
@@ -318,16 +325,16 @@ class WorldTimeViewCtrl
               children: [
                 Icon(Icons.calendar_today, size: 16.h),
                 HortSep(8.0),
-                Text(time.formattedDate),
+                Text((time != null) ? time.formattedDate : "Date??"),
                 HortSep(16.0),
                 Icon(Icons.public, size: 16.h),
                 HortSep(8.0),
-                Text(time.formattedOffset),
+                Text((time != null) ? time.formattedOffset : "Offset??"),
               ],
             ),
 
             // Indicador DST si és aplicable
-            if (time.isDST) ...[
+            if (time != null && time.isDST) ...[
               VertSep(8.0),
               Row(
                 children: [
