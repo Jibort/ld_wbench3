@@ -15,7 +15,6 @@ export 'state.dart';
 class WorldTimeView extends LdView<WorldTimeViewState, WorldTimeViewCtrl> {
   // 📝 ESTÀTICS -----------------------
   static String className = "WorldTimeView";
-  static String viewTag = "${className}_tag";
   static const routeName = "/world-time";
 
   // 🛠️ CONSTRUCTORS ------------------
@@ -47,12 +46,12 @@ class WorldTimeViewBinding extends Bindings {
       "-> WorldTimeViewCtrl ctrl = WorldTimeViewCtrl(...)",
     );
     WorldTimeViewCtrl ctrl = WorldTimeViewCtrl(
-      pTag: WorldTimeView.viewTag,
+      pTag: WorldTimeView.className,
       pViewState: state,
     );
 
     // Afegeix el controlador a la cua de prioritat
     Debug.debug(DebugLevel.debug_0, "-> Get.parameters[parmElm] = ctrl.tag;");
-    Get.parameters[parmElm] = ctrl.tag;
+    Get.parameters[parmViewTag] = ctrl.tag;
   }
 }

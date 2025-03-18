@@ -17,7 +17,7 @@ export 'state.dart';
 class EmptyView extends LdView<EmptyViewState, EmptyViewCtrl> {
   // 📝 ESTÀTICS -----------------------
   static String className = "EmptyView";
-  static String viewTag = "${className}_tag";
+  // static String viewTag = "${className}_tag";
   static const routeName = "/empty";
 
   // 🛠️ CONSTRUCTORS ------------------
@@ -52,12 +52,12 @@ class EmptyViewBinding extends Bindings {
       "-> EmptyViewCtrl ctrl = EmptyViewCtrl(...)",
     );
     EmptyViewCtrl ctrl = EmptyViewCtrl(
-      pTag: EmptyView.viewTag,
+      pTag: EmptyView.className,
       pViewState: state,
     );
 
     // Afegeix el controlador a la cua de prioritat
     Debug.debug(DebugLevel.debug_0, "-> Get.parameters[parmElm] = ctrl.tag;");
-    Get.parameters[parmElm] = ctrl.tag;
+    Get.parameters[parmViewTag] = ctrl.tag;
   }
 }

@@ -29,6 +29,7 @@ abstract class LdView<S extends LdViewState<S, C>, C extends LdViewCtrl<C, S>>
   // 📥 GETTERS/SETTERS ----------------
   S get state => _state;
   C get ctrl => _ctrl;
+  String get viewTag => ctrl.tag;
 
   // 🛠️ CONSTRUCCIÓ DE LA VISTA -------
   @override

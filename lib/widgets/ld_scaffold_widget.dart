@@ -11,6 +11,7 @@ import 'package:ld_wbench3/widgets/widget_key.dart';
 class LdScaffoldWidget extends LdWidget<LdScaffoldWidgetCtrl> {
   // 📝 ESTÀTICS -----------------------
   static const String className = "LdScaffoldWidget";
+  static int counter = 0;
 
   // 🧩 MEMBRES --------------------------
   LdAppBarWidget? appBar;
@@ -37,7 +38,7 @@ class LdScaffoldWidget extends LdWidget<LdScaffoldWidgetCtrl> {
     tag = scaffoldIdx;
     typeName = className;
     ctrl = LdScaffoldWidgetCtrl(
-      pTag: scaffoldIdx,
+      pTag: "${scaffoldIdx}__${counter++}",
       pViewCtrl: viewCtrl,
       title: pTitle,
       subtitle: pSubTitle,

@@ -18,7 +18,7 @@ class AppRoutes {
     GetPage(
       name: EmptyView.routeName,
       page: () {
-        String tag = Get.parameters[parmElm] ?? "tag?";
+        String tag = Get.parameters[parmViewTag] ?? "tag?";
         Get.parameters.remove(tag);
         return EmptyView(pTag: tag);
       },
@@ -29,7 +29,7 @@ class AppRoutes {
     GetPage(
       name: ThemeTestView.routeName,
       page: () {
-        String tag = Get.parameters[parmElm] ?? "tag?";
+        String tag = Get.parameters[parmViewTag] ?? "tag?";
         Get.parameters.remove(tag);
         return ThemeTestView(pTag: tag);
       },
@@ -40,7 +40,7 @@ class AppRoutes {
     GetPage(
       name: WorldTimeView.routeName,
       page: () {
-        String tag = Get.parameters[parmElm] ?? "tag?";
+        String tag = Get.parameters[parmViewTag] ?? "tag?";
         Get.parameters.remove(tag);
         return WorldTimeView(pTag: tag);
       },

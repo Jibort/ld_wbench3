@@ -29,22 +29,13 @@ class WorldTimeViewCtrl
   final _networkService = LdNetworkService.single;
   RxBool isLoading = false.obs;
 
-  // Llista de zones horàries que mostrarem
-  // final List<String> capitalTimezones = [
-  //   'Europe/London', // Londres
-  //   'Europe/Paris', // París
-  //   'America/New_York', // Nova York
-  //   'Asia/Tokyo', // Tòquio
-  //   'Australia/Sydney', // Sydney
-  // ];
-
   // 🛠️ CONSTRUCTORS ------------------
   WorldTimeViewCtrl({required super.pTag, required super.pViewState}) {
     addWidgets([
-      scaffoldIdx,
-      pageBodyIdx,
-      appBarIdx,
-      appBarProgressIdx,
+      scaffoldWIdx, // Calculat directament des de LdViewCtrl
+      pageBodyWIdx, // Calculat directament des de LdViewCtrl
+      appBarWIdx, // Calculat directament des de LdViewCtrl
+      barProgressWIdx, // Calculat directament des de LdViewCtrl
       btnRefreshIdx,
     ]);
   }
